@@ -5,7 +5,7 @@
 * has http method GET with path /health/
 * response as: {"status": "OK"}
 
-### Wrap application in alpine-base docker-image 
+### Wrap application with docker-image 
 * build image locally
-* push it on public repository in Docker hub
+* push it on Docker hub public repository
 

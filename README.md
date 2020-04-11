@@ -1,4 +1,6 @@
-# otusSoftwareArchitect
+# OtusSoftwareArchitect
 Softwarearchitect_032020 course homeworks.
+
+## Agenda
 Each homework has its own branch, named according with lesson number followed with lesson keyword.
-For example lesson2 homework's branch has name lesson02_dockerbase
+For example: Branch for Lesson #2 has name lesson02_dockerbase

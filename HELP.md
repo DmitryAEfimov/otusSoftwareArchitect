@@ -11,4 +11,5 @@
 
 ### Install & Run
 docker pull defimov/otus_lesson2:01
+
 docker run --rm -dit --name lesson2_app -p 8080:8080 defimov/otus_lesson2:01

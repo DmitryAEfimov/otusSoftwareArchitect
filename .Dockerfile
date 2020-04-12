@@ -12,9 +12,15 @@ RUN mvn clean install
 FROM adoptopenjdk:11-jre-openj9
 MAINTAINER  Dmitry Efimov <d.efimov@argustelecom.ru>
 
+EXPOSE 8000
+
 WORKDIR /opt/app
 COPY --from=builder /tmp/lesson2_app/target/lesson2.jar .
 
-EXPOSE 8000
+RUN groupadd -g 999 appuser && \
+    useradd -r -u 999 -g appuser appuser && \
+    chmod 644 lesson2.jar
+USER appuser
+
 ENTRYPOINT ["java"]
 CMD ["-jar", "-Dserver.port=8000", "lesson2.jar"]

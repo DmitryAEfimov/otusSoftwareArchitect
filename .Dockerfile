@@ -14,5 +14,7 @@ MAINTAINER  Dmitry Efimov <d.efimov@argustelecom.ru>
 
 WORKDIR /opt/app
 COPY --from=builder /tmp/lesson2_app/target/lesson2.jar .
+
+EXPOSE 8000
 ENTRYPOINT ["java"]
-CMD ["-jar", "lesson2.jar"]
+CMD ["-jar", "-Dserver.port=8000", "lesson2.jar"]

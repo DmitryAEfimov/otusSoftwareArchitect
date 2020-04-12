@@ -17,7 +17,7 @@ public class AppRestController {
 	@GetMapping(value = "health")
 	public ObjectNode checkHealth() {
 		ObjectNode response = mapper.createObjectNode();
-		response.put("status", HttpStatus.OK.value());
+		response.put("status", HttpStatus.OK.getReasonPhrase());
 
 		return response;
 	}

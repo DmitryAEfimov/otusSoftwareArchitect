@@ -11,9 +11,5 @@
 
 ### Install & Run
 docker pull defimov/otus_lesson2:01
-<<<<<<< HEAD
-docker run --rm -dit --name lesson2_app -p 8000:8000 defimov/otus_lesson2:01
-=======
 
-docker run --rm -dit --name lesson2_app -p 8080:8080 defimov/otus_lesson2:01
->>>>>>> lesson02_dockerbase
+docker run --rm -dit --name lesson2_app -p 8000:8000 defimov/otus_lesson2:01

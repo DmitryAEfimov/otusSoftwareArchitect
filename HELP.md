@@ -6,7 +6,7 @@
 * Base URL is http://arch.homework/otusapp/
 
 ### Manifest requirements 
-* docker image to deploy defimov/otus_lesson2:01
+* docker image to deploy defimov/otus_lesson2:v1
 * yaml files contains sections for Deployment, Service & Ingress entities 
 * yaml files contains sections for Liveness & Readiness probes
 * at least 2 replicas should be deployed

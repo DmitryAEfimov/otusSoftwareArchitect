@@ -10,6 +10,6 @@
 * push it on Docker hub public repository
 
 ### Install & Run
-docker pull defimov/otus_lesson2:01
+docker pull defimov/otus_lesson2:v1
 
-docker run --rm -dit --name lesson2_app -p 8000:8000 defimov/otus_lesson2:01
+docker run --rm -dit --name lesson2_app -p 8000:8000 defimov/otus_lesson2:v1

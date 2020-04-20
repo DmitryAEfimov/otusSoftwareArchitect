@@ -13,3 +13,8 @@
 * write Ingress rule to forward requests from base URL to service
 
 ### Install & Run
+Clone or download yaml files to single directory on your local host
+
+execute command: ``` kubectl apply -f ./deployment.yaml -f ./service.yaml -f ./ingress.yaml ```  
+
+check service with GET request ``` curl http://arch.homework/otusapp/health ```

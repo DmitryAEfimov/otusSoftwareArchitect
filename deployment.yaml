@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: health
-          image: defimov/otus_lesson2:v2
+          image: defimov/otus_lesson2:v1
           ports:
             - containerPort: 8000
               name: web

@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson2;
+package ru.otus.softwarearchitect.defimov.lesson5;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

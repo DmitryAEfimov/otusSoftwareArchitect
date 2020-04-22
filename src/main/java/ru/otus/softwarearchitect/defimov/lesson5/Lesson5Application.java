@@ -1,12 +1,12 @@
-package ru.otus.softwarearchitect.defimov.lesson2;
+package ru.otus.softwarearchitect.defimov.lesson5;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Lesson2Application {
+public class Lesson5Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Lesson2Application.class, args);
+		SpringApplication.run(Lesson5Application.class, args);
 	}
 }

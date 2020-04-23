@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: flyway-migration
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: flyway
+          image: defimov/flyway:v1
+          env:
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: dbname
+            - name: DB_URL
+              value: jdbc:postgresql://192.168.123.120:31146/postgres
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
+      initContainers:
+        - name: check-db-ready
+          image: alpine:3.11
+          command:
+            - sh
+            - "-c"
+            - |
+              apk add postgresql-client && until pg_isready -h 192.168.123.120 -p 31146;  do echo waiting for database; sleep 2; done;
+  backoffLimit: 0

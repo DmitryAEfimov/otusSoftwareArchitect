@@ -34,7 +34,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  export PGPASSWORD=$POSTGRES_PASSWORD; psql -U $POSTGRES_USER -c 'SELECT 1' $POSTGRES_DB
+                  export PGPASSWORD=$DB_PASSWORD; psql -U $DB_USER -c 'SELECT 1' $DB_NAME
             initialDelaySeconds: 5
             periodSeconds: 30
             timeoutSeconds: 10

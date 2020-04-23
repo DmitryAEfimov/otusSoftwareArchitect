@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgress-db
+  name: postgres-db
 
 spec:
   replicas: 1
@@ -21,9 +21,22 @@ spec:
           image: postgres:12.2
           ports:
             - containerPort: 5432
-          envFrom:
-            - secretRef:
-                name: db-secret
+          env:
+            - name: POSTGRES_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: dbname
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
           volumeMounts:
             - name: postgredb
               mountPath: /var/lib/postgresql/data
@@ -34,7 +47,7 @@ spec:
                 - bash
                 - "-c"
                 - |
-                  export PGPASSWORD=$DB_PASSWORD; psql -U $DB_USER -c 'SELECT 1' $DB_NAME
+                  export PGPASSWORD=$POSTGRES_PASSWORD; psql -U $POSTGRES_USER -c 'SELECT 1' $POSTGRES_DATABASE
             initialDelaySeconds: 5
             periodSeconds: 30
             timeoutSeconds: 10

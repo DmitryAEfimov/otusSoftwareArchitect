@@ -8,16 +8,18 @@
 		<version>2.2.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>ru.orus.softwarearchitect.defimov</groupId>
-	<artifactId>lesson2</artifactId>
+	<artifactId>lesson5</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>lesson2</name>
-	<description>Demo project for Spring Boot</description>
+	<name>app</name>
 
 	<properties>
 		<java.version>11</java.version>
-		<postgresql.version>42.2.10</postgresql.version>
 		<guava.version>29.0-jre</guava.version>
+
+		<postgresql.version>42.2.10</postgresql.version>
+		<h2.version>1.4.200</h2.version>
 	</properties>
 
 	<dependencies>
@@ -39,6 +41,14 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -58,7 +68,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>${project.name}</finalName>
 
 		<plugins>
 			<plugin>

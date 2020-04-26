@@ -1,31 +1,52 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: health-deployment
+  name: app-deployment
 spec:
   replicas: 3
 
   selector:
     matchLabels:
-      app: health-app
+      app: app
 
   template:
     metadata:
       labels:
-        app: health-app
+        app: app
     spec:
       containers:
-        - name: health
-          image: defimov/otus_lesson2:v1
+        - name: app
+          image: defimov/app:v2
           ports:
             - containerPort: 8000
               name: web
+          env:
+            - name: SPRING_APPLICATION_JSON
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: appconfig.json
           livenessProbe:
-            httpGet:
-              port: 8000
-              path: /
-          readinessProbe:
             httpGet:
               port: 8000
               path: /health
             periodSeconds: 5
+      initContainers:
+        - name: check-db-actual
+          image: alpine:3.11
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secret
+          command:
+            - sh
+            - "-c"
+            - |
+              apk add postgresql-client && \
+              until [[ "`PGPASSWORD=$DB_PASSWORD \
+              psql -XAt -h $DB_HOSTNAME -U $DB_USER -c 'select version from flyway_schema_history' $DB_NAME`" == "$DB_VERSION" ]];
+              do
+                echo waiting for database;
+                sleep 2;
+              done;

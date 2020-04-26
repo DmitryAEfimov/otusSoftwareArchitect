@@ -12,5 +12,5 @@ spec:
         paths:
           - path: /otusapp($|/)(.*)
             backend:
-              serviceName: health-service
+              serviceName: app-service
               servicePort: 80

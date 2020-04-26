@@ -35,14 +35,14 @@ spec:
         - name: check-db-ready
           image: alpine:3.11
           env:
-           - name: DB_HOSTNAME
-             valueFrom:
-               configMapKeyRef:
-                 name: db-config
-                 key: hostname
+            - name: DB_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: hostname
           command:
             - sh
             - "-c"
             - |
-               apk add postgresql-client && until pg_isready -h $DB_HOSTNAME; do echo waiting for database; sleep 2; done;
+              apk add postgresql-client && until pg_isready -h $DB_HOSTNAME; do echo waiting for database; sleep 2; done;
   backoffLimit: 0

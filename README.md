@@ -11,7 +11,7 @@
 * App configuration is stored in ConfigMap
 * DB password is stored in Secrets
 * DB initialization via separate Pod or Job 
-* Ingress rule to forward requests from base URL (http://arch.homework/otusapp/) to service
+* Ingress rule to forward requests from base URL (http://arch.homework) to service
 #### Optional
 * Describe deployment with helm chart 
 * Use official DB helm chart as dependency

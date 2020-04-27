@@ -17,7 +17,7 @@
 * Use official DB helm chart as dependency
 
 
-#### Pre-install
+### Pre-install
 Install, configure & run [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
 Install and configure [helm](https://helm.sh/docs/intro/install/)
@@ -32,22 +32,20 @@ Execute command: ``` helm uninstall hw-lesson5 ``` to stop application
 ### Usage
 Before your start you have to resolve host arch.homework. It can be done with
 * add result of ``` echo "$(minikube ip) arch.homework" ``` to /etc/hosts and restart network
-* change postman collection. Replace ``` arch.homework ``` with result of ``` $(minikube ip) ``` in all url's. Also you have to add header ``` Host: arch.homework ```
+* Add header ``` Host: arch.homework ``` and send requests to result of ``` echo $(minikube ip) ```
 
-Application consume and produce only JSON format
+User body example value ```{"id": "2122", "userName": "johndoe589", "firstName": "John", "lastName": "Doe", "email": "bestjohn@doe.com", "phoneNumber": "+71002003040"}```
 
-Example value ```{"id": "2122", "userName": "johndoe589", "firstName": "John", "lastName": "Doe", "email": "bestjohn@doe.com", "phoneNumber": "+71002003040"}```
-
+#### Supported operations
 * Create new user
   * POST /users
 * Update existing user
-  * PUT /users?id=<id>
+  * PUT /users?id={id}
 * Delete existing user
-  * DELETE /users?id=<id>    
+  * DELETE /users?id={id}    
 * Get user info
-  * GET /users?id=<id>
+  * GET /users?id={id}
 * Get all users info
   * GET /users
   
-#### Examples
-See [postman test](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson05_minikubeadv/src/test/resources/postman)
+See examples in [postman test](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson05_minikubeadv/src/test/resources/postman)

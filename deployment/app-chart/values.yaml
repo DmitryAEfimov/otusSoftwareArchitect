@@ -57,6 +57,10 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+metrics:
+  serviceMonitor:
+    enabled: true
+
 postgresql:
   enabled: true
   postgresqlDatabase: postgres

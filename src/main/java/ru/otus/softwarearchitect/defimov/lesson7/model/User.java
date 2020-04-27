@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson5.model;
+package ru.otus.softwarearchitect.defimov.lesson7.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;

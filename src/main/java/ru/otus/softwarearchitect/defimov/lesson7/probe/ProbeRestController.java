@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson5.probe;
+package ru.otus.softwarearchitect.defimov.lesson7.probe;
 
 import com.google.common.collect.ImmutableMap;
 import org.springframework.http.HttpStatus;

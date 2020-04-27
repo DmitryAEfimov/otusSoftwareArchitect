@@ -1,10 +1,10 @@
-package ru.otus.softwarearchitect.defimov.lesson5;
+package ru.otus.softwarearchitect.defimov.lesson7;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Lesson5ApplicationTests {
+class Lesson7ApplicationTests {
 
     @Test
     void contextLoads() {

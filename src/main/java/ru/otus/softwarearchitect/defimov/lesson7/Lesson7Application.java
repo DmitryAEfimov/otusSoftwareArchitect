@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson5;
+package ru.otus.softwarearchitect.defimov.lesson7;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +10,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 @SpringBootApplication
-public class Lesson5Application {
+public class Lesson7Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Lesson5Application.class, args);
+		SpringApplication.run(Lesson7Application.class, args);
 	}
 
 	@Bean

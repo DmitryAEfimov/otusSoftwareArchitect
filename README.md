@@ -9,3 +9,5 @@ Each homework has its own branch, named according with lesson number followed by
 ### [Lesson #3](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson03_minikubebase)
 
 ### [Lesson #5](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson05_minikubeadv)
+
+### [Lesson #7](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson07_prometheus)

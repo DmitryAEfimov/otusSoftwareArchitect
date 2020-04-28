@@ -1,13 +1,13 @@
-package ru.otus.softwarearchitect.defimov.lesson7.restcontroller;
+package ru.otus.softwarearchitect.defimov.lesson7.shop.restcontroller;
 
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.softwarearchitect.defimov.lesson7.model.User;
-import ru.otus.softwarearchitect.defimov.lesson7.repository.UserRepository;
-import ru.otus.softwarearchitect.defimov.lesson7.restcontroller.exception.UserChangeException;
-import ru.otus.softwarearchitect.defimov.lesson7.restcontroller.exception.UserNotFoundException;
+import ru.otus.softwarearchitect.defimov.lesson7.shop.model.User;
+import ru.otus.softwarearchitect.defimov.lesson7.shop.repository.UserRepository;
+import ru.otus.softwarearchitect.defimov.lesson7.shop.restcontroller.exception.UserChangeException;
+import ru.otus.softwarearchitect.defimov.lesson7.shop.restcontroller.exception.UserNotFoundException;
 
 import java.util.List;
 import java.util.Locale;

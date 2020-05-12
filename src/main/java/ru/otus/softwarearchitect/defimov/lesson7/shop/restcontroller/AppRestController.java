@@ -1,9 +1,16 @@
 package ru.otus.softwarearchitect.defimov.lesson7.shop.restcontroller;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.otus.softwarearchitect.defimov.lesson7.shop.model.User;
 import ru.otus.softwarearchitect.defimov.lesson7.shop.repository.UserRepository;
 import ru.otus.softwarearchitect.defimov.lesson7.shop.restcontroller.exception.UserChangeException;
@@ -16,6 +23,8 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkArgument;
 
 @RestController
+@Timed(value = "app_request",
+		histogram = true)
 public class AppRestController {
 	private final UserRepository userRepository;
 	private MessageSource messageSource;

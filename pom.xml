@@ -16,11 +16,10 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<guava.version>29.0-jre</guava.version>
 
-		<postgresql.version>42.2.11</postgresql.version>
+		<postgresql.version>42.2.12</postgresql.version>
 		<h2.version>1.4.200</h2.version>
-		<micrometer.version>1.4.2</micrometer.version>
+		<micrometer.version>1.5.1</micrometer.version>
 	</properties>
 
 	<dependencies>

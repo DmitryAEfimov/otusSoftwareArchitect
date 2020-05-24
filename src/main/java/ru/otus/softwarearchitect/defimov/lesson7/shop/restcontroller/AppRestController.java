@@ -18,9 +18,8 @@ import ru.otus.softwarearchitect.defimov.lesson7.shop.restcontroller.exception.U
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 @RestController
 @Timed(value = "app_request",
@@ -36,14 +35,14 @@ public class AppRestController {
 
 	@PostMapping(value = "users")
 	public User createUser(@RequestBody User user) {
-		try {
-			checkArgument(user.getId() == null);
+		if (Objects.nonNull(user.getId())) {
+			throw new UserChangeException(messageSource.getMessage("userIdAlreadyExists", null, Locale.US));
+		}
 
+		try {
 			return userRepository.save(user);
 		} catch (DataIntegrityViolationException ex) {
 			throw new UserChangeException(Optional.ofNullable(ex.getRootCause()).orElse(ex).getMessage());
-		} catch (IllegalArgumentException ex) {
-			throw new UserChangeException(messageSource.getMessage("userIdAlreadyExists", null, Locale.US));
 		}
 	}
 

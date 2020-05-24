@@ -10,7 +10,7 @@
 	</parent>
 
 	<groupId>ru.orus.softwarearchitect.defimov</groupId>
-	<artifactId>lesson5</artifactId>
+	<artifactId>lesson7</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>app</name>
 

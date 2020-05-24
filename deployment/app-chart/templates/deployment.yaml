@@ -68,7 +68,7 @@ spec:
                   key: appconfig.json
           livenessProbe:
             httpGet:
-              path: /management/health
+              path: /manage/health
               port: http
             periodSeconds: 5
           resources:

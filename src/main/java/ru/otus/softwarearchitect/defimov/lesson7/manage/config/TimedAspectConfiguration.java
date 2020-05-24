@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson7.management.config;
+package ru.otus.softwarearchitect.defimov.lesson7.manage.config;
 
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;

@@ -16,5 +16,5 @@ spec:
   endpoints:
     - interval: 15s
       port: http
-      path: /management/prometheus
+      path: /manage/prometheus
   {{- end }}

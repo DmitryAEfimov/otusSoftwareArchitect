@@ -6,10 +6,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.softwarearchitect.defimov.lesson7.shop.model.User;
 import ru.otus.softwarearchitect.defimov.lesson7.shop.repository.UserRepository;
@@ -26,7 +26,7 @@ import java.util.Optional;
 		histogram = true)
 public class AppRestController {
 	private final UserRepository userRepository;
-	private MessageSource messageSource;
+	private final MessageSource messageSource;
 
 	public AppRestController(UserRepository userRepository, MessageSource messageSource) {
 		this.userRepository = userRepository;
@@ -46,8 +46,8 @@ public class AppRestController {
 		}
 	}
 
-	@PutMapping(value = "users", params = {"id"}, produces = MediaType.APPLICATION_JSON_VALUE)
-	public User updateUser(@RequestParam(name = "id") int id, @RequestBody User user) {
+	@PutMapping(value = "users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public User updateUser(@PathVariable(name = "id") int id, @RequestBody User user) {
 		User entityUser = findById(id);
 		user.setId(entityUser.getId());
 
@@ -58,8 +58,8 @@ public class AppRestController {
 		}
 	}
 
-	@DeleteMapping(value = "users", params = {"id"})
-	public void deleteUser(@RequestParam(name = "id") int id) {
+	@DeleteMapping(value = "users/{id}")
+	public void deleteUser(@PathVariable(name = "id") int id) {
 		User user = findById(id);
 
 		try {
@@ -74,8 +74,8 @@ public class AppRestController {
 		return userRepository.findAll();
 	}
 
-	@GetMapping(value = "users", params = {"id"}, produces = MediaType.APPLICATION_JSON_VALUE)
-	public User findUser(@RequestParam(name = "id") int id) {
+	@GetMapping(value = "users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public User findUser(@PathVariable(name = "id") int id) {
 		return findById(id);
 	}
 

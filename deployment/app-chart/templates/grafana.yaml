@@ -1,0 +1,1184 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ include "app-chart.fullname" . }}-grafana-dashboards"
+  labels:
+    grafana-dashboard: "1"
+data:
+  grafana-app-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 25,
+      "links": [],
+      "panels": [
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 5,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "hiddenSeries": false,
+        "id": 6,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "expr": "sum by (status, uri) (increase(app_request_seconds_count{status=~\"5.+\",method=\"GET\"}[1m]))",
+          "interval": "",
+          "legendFormat": "{{"{{"}}status}} - {{"{{"}}uri}}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum by (status, exported_service) (increase(nginx_ingress_controller_request_duration_seconds_count{status=~\"5.+\",method=\"GET\"}[1m]))",
+          "interval": "",
+          "legendFormat": "nginx {{"{{"}}status}} - {{"{{"}}exported_service}}",
+          "refId": "B"
+        }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "READ Error 5xx",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 5,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "hiddenSeries": false,
+        "id": 8,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "expr": "sum by (status, method, uri) (increase(app_request_seconds_count{status=~\"5.+\",method=~\"POST|PUT|DELETE\"}[1m]))",
+          "interval": "",
+          "legendFormat": "{{"{{"}}status}} - {{"{{"}}method}} {{"{{"}}uri}}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum by (status, method, exported_service) (increase(nginx_ingress_controller_request_duration_seconds_count{status=~\"5.+\",method=~\"POST|PUT|DELETE\"}[1m]))",
+          "interval": "",
+          "legendFormat": "nginx {{"{{"}}status}} - {{"{{"}}method}} {{"{{"}}exported_service}}",
+          "refId": "B"
+        }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "CREATE/UPDATE/DELETE Error 5xx",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "alert": {
+          "alertRuleTags": {},
+          "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                20
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "B",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "READ RPS alert",
+          "noDataState": "no_data",
+          "notifications": []
+        },
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 5
+        },
+        "hiddenSeries": false,
+        "id": 17,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "expr": "sum by (uri) (rate(app_request_seconds_count{method=\"GET\"}[1m]))",
+          "interval": "",
+          "legendFormat": "{{"{{"}}uri}}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum by (method, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_count{method=\"GET\"}[1m]))",
+          "interval": "",
+          "legendFormat": "nginx - {{"{{"}}method}} {{"{{"}}exported_service}}",
+          "refId": "B"
+        }
+        ],
+        "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 20
+        }
+        ],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "READ RPS",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "alert": {
+          "alertRuleTags": {},
+          "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                12
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "B",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "CREATE/UPDATE/DELETE RPS alert",
+          "noDataState": "no_data",
+          "notifications": []
+        },
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 5
+        },
+        "hiddenSeries": false,
+        "id": 16,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "expr": "sum by (method, uri) (rate(app_request_seconds_count{method=~\"POST|PUT|DELETE\"}[1m]))",
+          "interval": "",
+          "legendFormat": "{{"{{"}}method}} {{"{{"}}uri}}",
+          "refId": "A"
+        },
+        {
+          "expr": "sum by (method, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_count{method=~\"POST|PUT|DELETE\"}[1m]))",
+          "interval": "",
+          "legendFormat": "nginx - {{"{{"}}method}} {{"{{"}}exported_service}}",
+          "refId": "B"
+        }
+        ],
+        "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 12
+        }
+        ],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "CREATE/UPDATE/DELETE RPS",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "alert": {
+          "alertRuleTags": {},
+          "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                10
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "D",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "GET Latency alert",
+          "noDataState": "no_data",
+          "notifications": []
+        },
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 0,
+          "y": 13
+        },
+        "hiddenSeries": false,
+        "id": 10,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "expr": "histogram_quantile(0.5, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.5 {{"{{"}}uri}}",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.5, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.5 {{"{{"}}exported_service}}",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.9 {{"{{"}}uri}}",
+          "refId": "C"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.9 {{"{{"}}exported_service}}",
+          "refId": "D"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.99 {{"{{"}}uri}}",
+          "refId": "E"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.99 {{"{{"}}exported_service}}",
+          "refId": "F"
+        }
+        ],
+        "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 10
+        }
+        ],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "GET Latency",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "alert": {
+          "alertRuleTags": {},
+          "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                400
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "D",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "POST Latency alert",
+          "noDataState": "no_data",
+          "notifications": []
+        },
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 12,
+          "y": 13
+        },
+        "hiddenSeries": false,
+        "id": 14,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "expr": "histogram_quantile(0.5, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.5 {{"{{"}}uri}}",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.5, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.5 {{"{{"}}exported_service}}",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.9 {{"{{"}}uri}}",
+          "refId": "C"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.9 {{"{{"}}exported_service}}",
+          "refId": "D"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.99 {{"{{"}}uri}}",
+          "refId": "E"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.99 {{"{{"}}exported_service}}",
+          "refId": "F"
+        }
+        ],
+        "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 400
+        }
+        ],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "POST Latency",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "alert": {
+          "alertRuleTags": {},
+          "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                400
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "D",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "PUT Latency alert",
+          "noDataState": "no_data",
+          "notifications": []
+        },
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 20
+        },
+        "hiddenSeries": false,
+        "id": 12,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "expr": "histogram_quantile(0.5, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.5 {{"{{"}}uri}}",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.5, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.5 {{"{{"}}exported_service}}",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.9 {{"{{"}}uri}}",
+          "refId": "C"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.9 {{"{{"}}exported_service}}",
+          "refId": "D"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.99 {{"{{"}}uri}}",
+          "refId": "E"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.99 {{"{{"}}exported_service}}",
+          "refId": "F"
+        }
+        ],
+        "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 400
+        }
+        ],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "PUT Latency",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "alert": {
+          "alertRuleTags": {},
+          "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                400
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "D",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "DELETE Latency alert",
+          "noDataState": "no_data",
+          "notifications": []
+        },
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 20
+        },
+        "hiddenSeries": false,
+        "id": 4,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "expr": "histogram_quantile(0.5, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.5 {{"{{"}}uri}}",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.5, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.5 {{"{{"}}exported_service}}",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.9 {{"{{"}}uri}}",
+          "refId": "C"
+        },
+        {
+          "expr": "histogram_quantile(0.9, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.9 {{"{{"}}exported_service}}",
+          "refId": "D"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "0.99 {{"{{"}}uri}}",
+          "refId": "E"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
+          "interval": "",
+          "legendFormat": "nginx - 0.99 {{"{{"}}exported_service}}",
+          "refId": "F"
+        }
+        ],
+        "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 400
+        }
+        ],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "DELETE Latency",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      }
+      ],
+      "refresh": "10s",
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "APP DASHBOARD",
+      "uid": "i1HlTw3Wk",
+      "variables": {
+        "list": []
+      },
+      "version": 1
+    }

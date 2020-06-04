@@ -69,13 +69,13 @@ data:
         "steppedLine": false,
         "targets": [
         {
-          "expr": "sum by (status, uri) (increase(app_request_seconds_count{status=~\"5.+\",method=\"GET\"}[1m]))",
+          "expr": "sum by (status, uri) (increase(app_request_seconds_count{status=~\"[4|5].+\",method=\"GET\"}[1m]))",
           "interval": "",
           "legendFormat": "{{"{{"}}status}} - {{"{{"}}uri}}",
           "refId": "A"
         },
         {
-          "expr": "sum by (status, exported_service) (increase(nginx_ingress_controller_request_duration_seconds_count{status=~\"5.+\",method=\"GET\"}[1m]))",
+          "expr": "sum by (status, exported_service) (increase(nginx_ingress_controller_request_duration_seconds_count{status=~\"[4|5].+\",method=\"GET\"}[1m]))",
           "interval": "",
           "legendFormat": "nginx {{"{{"}}status}} - {{"{{"}}exported_service}}",
           "refId": "B"
@@ -85,7 +85,7 @@ data:
         "timeFrom": null,
         "timeRegions": [],
         "timeShift": null,
-        "title": "READ Error 5xx",
+        "title": "READ Errors",
         "tooltip": {
           "shared": true,
           "sort": 0,
@@ -165,13 +165,13 @@ data:
         "steppedLine": false,
         "targets": [
         {
-          "expr": "sum by (status, method, uri) (increase(app_request_seconds_count{status=~\"5.+\",method=~\"POST|PUT|DELETE\"}[1m]))",
+          "expr": "sum by (status, method, uri) (increase(app_request_seconds_count{status=~\"[4|5].+\",method=~\"POST|PUT|DELETE\"}[1m]))",
           "interval": "",
           "legendFormat": "{{"{{"}}status}} - {{"{{"}}method}} {{"{{"}}uri}}",
           "refId": "A"
         },
         {
-          "expr": "sum by (status, method, exported_service) (increase(nginx_ingress_controller_request_duration_seconds_count{status=~\"5.+\",method=~\"POST|PUT|DELETE\"}[1m]))",
+          "expr": "sum by (status, method, exported_service) (increase(nginx_ingress_controller_request_duration_seconds_count{status=~\"[4|5].+\",method=~\"POST|PUT|DELETE\"}[1m]))",
           "interval": "",
           "legendFormat": "nginx {{"{{"}}status}} - {{"{{"}}method}} {{"{{"}}exported_service}}",
           "refId": "B"
@@ -181,7 +181,7 @@ data:
         "timeFrom": null,
         "timeRegions": [],
         "timeShift": null,
-        "title": "CREATE/UPDATE/DELETE Error 5xx",
+        "title": "CREATE/UPDATE/DELETE Errors",
         "tooltip": {
           "shared": true,
           "sort": 0,
@@ -503,7 +503,7 @@ data:
           {
             "evaluator": {
               "params": [
-                10
+                25
               ],
               "type": "gt"
             },
@@ -537,7 +537,7 @@ data:
         "dashLength": 10,
         "dashes": false,
         "datasource": null,
-        "fill": 1,
+        "fill": 0,
         "fillGradient": 0,
         "gridPos": {
           "h": 7,
@@ -700,7 +700,7 @@ data:
         "dashLength": 10,
         "dashes": false,
         "datasource": null,
-        "fill": 1,
+        "fill": 0,
         "fillGradient": 0,
         "gridPos": {
           "h": 7,
@@ -863,7 +863,7 @@ data:
         "dashLength": 10,
         "dashes": false,
         "datasource": null,
-        "fill": 1,
+        "fill": 0,
         "fillGradient": 0,
         "gridPos": {
           "h": 8,
@@ -1026,7 +1026,7 @@ data:
         "dashLength": 10,
         "dashes": false,
         "datasource": null,
-        "fill": 1,
+        "fill": 0,
         "fillGradient": 0,
         "gridPos": {
           "h": 8,

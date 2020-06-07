@@ -70,7 +70,7 @@ data:
         {
           "expr": "sum by (pod, container) (rate(container_memory_working_set_bytes{namespace=\"monitoring\", container=~\"app-(chart|postgresql)\"}[5m]))",
           "interval": "",
-          "legendFormat": "{{""}}pod}}-{{""}}container}}",
+          "legendFormat": "{{"{{"}}pod}}-{{"{{"}}container}}",
           "refId": "A"
         }
         ],
@@ -158,7 +158,7 @@ data:
         {
           "expr": "rate(container_cpu_usage_seconds_total{namespace=\"monitoring\", container=~\"app-(chart|postgresql)\"}[5m])",
           "interval": "",
-          "legendFormat": "{{""}}pod}}-{{""}}container}}",
+          "legendFormat": "{{"{{"}}pod}}-{{"{{"}}container}}",
           "refId": "A"
         }
         ],
@@ -248,13 +248,13 @@ data:
         {
           "expr": "sum by (status, method, uri) (increase(app_request_seconds_count{status=~\"5.+\"}[1m]))",
           "interval": "",
-          "legendFormat": "{{""}}status}} - {{""}}method}} {{""}}uri}}",
+          "legendFormat": "{{"{{"}}status}} - {{"{{"}}method}} {{"{{"}}uri}}",
           "refId": "A"
         },
         {
           "expr": "sum by (status, method, exported_service) (increase(nginx_ingress_controller_request_duration_seconds_count{status=~\"5.+\"}[1m]))",
           "interval": "",
-          "legendFormat": "{{""}}status}} - {{""}}method}} {{""}}exported_service}} - nginx",
+          "legendFormat": "{{"{{"}}status}} - {{"{{"}}method}} {{"{{"}}exported_service}} - nginx",
           "refId": "B"
         }
         ],
@@ -379,13 +379,13 @@ data:
         {
           "expr": "sum by (uri) (rate(app_request_seconds_count{method=\"GET\"}[1m]))",
           "interval": "",
-          "legendFormat": "{{""}}uri}}",
+          "legendFormat": "{{"{{"}}uri}}",
           "refId": "A"
         },
         {
           "expr": "sum by (method, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_count{method=\"GET\"}[1m]))",
           "interval": "",
-          "legendFormat": "{{""}}method}} {{""}}exported_service}} - nginx",
+          "legendFormat": "{{"{{"}}exported_service}} - nginx",
           "refId": "B"
         }
         ],
@@ -518,13 +518,13 @@ data:
         {
           "expr": "sum by (method, uri) (rate(app_request_seconds_count{method=~\"POST|PUT|DELETE\"}[1m]))",
           "interval": "",
-          "legendFormat": "{{""}}method}} {{""}}uri}}",
+          "legendFormat": "{{"{{"}}method}} {{"{{"}}uri}}",
           "refId": "A"
         },
         {
           "expr": "sum by (method, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_count{method=~\"POST|PUT|DELETE\"}[1m]))",
           "interval": "",
-          "legendFormat": "{{""}}method}} {{""}}exported_service}} - nginx",
+          "legendFormat": "{{"{{"}}method}} {{"{{"}}exported_service}} - nginx",
           "refId": "B"
         }
         ],
@@ -657,37 +657,37 @@ data:
         {
           "expr": "histogram_quantile(0.5, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.5: {{""}}uri}}",
+          "legendFormat": "percentile 0.5: {{"{{"}}uri}}",
           "refId": "A"
         },
         {
           "expr": "histogram_quantile(0.5, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.5: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.5: {{"{{"}}exported_service}} - nginx",
           "refId": "B"
         },
         {
           "expr": "histogram_quantile(0.9, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.9: {{""}}uri}}",
+          "legendFormat": "percentile 0.9: {{"{{"}}uri}}",
           "refId": "C"
         },
         {
           "expr": "histogram_quantile(0.9, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.9: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.9: {{"{{"}}exported_service}} - nginx",
           "refId": "D"
         },
         {
           "expr": "histogram_quantile(0.99, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.99: {{""}}uri}}",
+          "legendFormat": "percentile 0.99: {{"{{"}}uri}}",
           "refId": "E"
         },
         {
           "expr": "histogram_quantile(0.99, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"GET\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.99: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.99: {{"{{"}}exported_service}} - nginx",
           "refId": "F"
         }
         ],
@@ -820,37 +820,37 @@ data:
         {
           "expr": "histogram_quantile(0.5, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.5: {{""}}uri}}",
+          "legendFormat": "percentile 0.5: {{"{{"}}uri}}",
           "refId": "A"
         },
         {
           "expr": "histogram_quantile(0.5, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.5: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.5: {{"{{"}}exported_service}} - nginx",
           "refId": "B"
         },
         {
           "expr": "histogram_quantile(0.9, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.9: {{""}}uri}}",
+          "legendFormat": "percentile 0.9: {{"{{"}}uri}}",
           "refId": "C"
         },
         {
           "expr": "histogram_quantile(0.9, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.9: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.9: {{"{{"}}exported_service}} - nginx",
           "refId": "D"
         },
         {
           "expr": "histogram_quantile(0.99, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.99: {{""}}uri}}",
+          "legendFormat": "percentile 0.99: {{"{{"}}uri}}",
           "refId": "E"
         },
         {
           "expr": "histogram_quantile(0.99, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"POST\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.99: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.99: {{"{{"}}exported_service}} - nginx",
           "refId": "F"
         }
         ],
@@ -983,37 +983,37 @@ data:
         {
           "expr": "histogram_quantile(0.5, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.5: {{""}}uri}}",
+          "legendFormat": "percentile 0.5: {{"{{"}}uri}}",
           "refId": "A"
         },
         {
           "expr": "histogram_quantile(0.5, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.5: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.5: {{"{{"}}exported_service}} - nginx",
           "refId": "B"
         },
         {
           "expr": "histogram_quantile(0.9, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.9: {{""}}uri}}",
+          "legendFormat": "percentile 0.9: {{"{{"}}uri}}",
           "refId": "C"
         },
         {
           "expr": "histogram_quantile(0.9, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.9: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.9: {{"{{"}}exported_service}} - nginx",
           "refId": "D"
         },
         {
           "expr": "histogram_quantile(0.99, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.99: {{""}}uri}}",
+          "legendFormat": "percentile 0.99: {{"{{"}}uri}}",
           "refId": "E"
         },
         {
           "expr": "histogram_quantile(0.99, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"PUT\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.99: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.99: {{"{{"}}exported_service}} - nginx",
           "refId": "F"
         }
         ],
@@ -1146,37 +1146,37 @@ data:
         {
           "expr": "histogram_quantile(0.5, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.5: {{""}}uri}}",
+          "legendFormat": "percentile 0.5: {{"{{"}}uri}}",
           "refId": "A"
         },
         {
           "expr": "histogram_quantile(0.5, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.5: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.5: {{"{{"}}exported_service}} - nginx",
           "refId": "B"
         },
         {
           "expr": "histogram_quantile(0.9, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.9: {{""}}uri}}",
+          "legendFormat": "percentile 0.9: {{"{{"}}uri}}",
           "refId": "C"
         },
         {
           "expr": "histogram_quantile(0.9, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.9: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.9: {{"{{"}}exported_service}} - nginx",
           "refId": "D"
         },
         {
           "expr": "histogram_quantile(0.99, sum by (le, uri) (rate(app_request_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.99: {{""}}uri}}",
+          "legendFormat": "percentile 0.99: {{"{{"}}uri}}",
           "refId": "E"
         },
         {
           "expr": "histogram_quantile(0.99, sum by (le, exported_service) (rate(nginx_ingress_controller_request_duration_seconds_bucket{method=\"DELETE\"}[1m]))) * 1000",
           "interval": "",
-          "legendFormat": "percentile 0.99: {{""}}exported_service}} - nginx",
+          "legendFormat": "percentile 0.99: {{"{{"}}exported_service}} - nginx",
           "refId": "F"
         }
         ],
@@ -1327,7 +1327,7 @@ data:
         {
           "expr": "pg_database_size_bytes{name=\"postgres\"} /(1024*1024)",
           "interval": "",
-          "legendFormat": "{{""}}datname}} MiB",
+          "legendFormat": "{{"{{"}}name}} MiB",
           "refId": "A"
         }
         ],
@@ -1416,7 +1416,7 @@ data:
         {
           "expr": "sum by (datname) (rate(pg_stat_statements_mean_time_seconds[1m]))",
           "interval": "",
-          "legendFormat": "mean {{""}}datname}}",
+          "legendFormat": "{{"{{"}}datname}}",
           "refId": "A"
         }
         ],
@@ -1505,7 +1505,7 @@ data:
         {
           "expr": "sum by (datname) (increase(pg_stat_statements_calls{datname=\"postgres\"}[1m]))",
           "interval": "",
-          "legendFormat": "query {{""}}datname}}",
+          "legendFormat": "query {{"{{"}}datname}}",
           "refId": "A"
         }
         ],
@@ -1593,7 +1593,7 @@ data:
           "format": "time_series",
           "instant": true,
           "interval": "",
-          "legendFormat": "queryid-{{""}}queryid}}",
+          "legendFormat": "{{"{{"}}datname}}: {{"{{"}}queryid}}",
           "refId": "A"
         }
         ],
@@ -1642,7 +1642,7 @@ data:
           "expr": "topk(10, sum by (datname, queryid) (rate(pg_stat_statements_mean_time_seconds[1m])))",
           "instant": true,
           "interval": "",
-          "legendFormat": "{{""}}datname}} {{""}}queryid}}",
+          "legendFormat": "{{"{{"}}datname}}: {{"{{"}}queryid}}",
           "refId": "A"
         }
         ],

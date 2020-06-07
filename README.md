@@ -8,7 +8,7 @@
   * 5xx errors count
 * Configure alerting rules in Grafana   
 
-### Deployment requirements
+### Homework requirements
 * Use external prometheus-operator and nginx-controller helm charts
 * Deploy application with custom helm chart
   * Servicemonitor config file is part of helm chart
@@ -16,7 +16,7 @@
 * Create a standalone job with stress test
   * Should produce rps rate 5-20
   * Should be infinity
-  * Should request all API methods in application
+  * Should request all application's API
   * Should apply service name via ENV or helm value
   * Should request service via ingress-controller    
 * Dashboard snapshots with at least 5-10 minutes stress test activity 
@@ -27,7 +27,7 @@
   * Memory usage
 
 ### Pre-install
-Install, configure & run [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
+Install and configure [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
 Install and configure [helm](https://helm.sh/docs/intro/install/)
 
@@ -55,7 +55,7 @@ Execute command: ```helm uninstall app``` to stop application
 
 Download [stresstest directory](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson07_prometheus/stresstest) to local host
 
-Execute command: ```cd <stresstest directory>``` followed by ```helm install stress ./stresstest-chart/``` to begin test
+Execute command: ```cd <stresstest directory>``` followed by ```helm install stress ./stresstest-chart/``` to start test
 
 Execute command: ```helm uninstall stress``` to stop test
 

@@ -1,51 +1,63 @@
 # TODO
 
-### Create RESTful CRUD application
-* Model entity: User
-* Persistence layer: database
+### Enrich RESTful CRUD application (see [lesson 5](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson05_minikubeadv)) with metrics
+* Add prometheus metrics to application
+* Create Grafana application dashboard with metrics
+  * 0.5, 0.9, 0.99 percentile latency
+  * RPS
+  * 5xx errors count
+* Configure alerting rules in Grafana   
 
 ### Deployment requirements
-* Use StatefulSet in kubernetes manifest
-* Use official database docker image
-* Single DB replica
-* App configuration is stored in ConfigMap
-* DB password is stored in Secrets
-* DB initialization via separate Pod or Job 
-* Ingress rule to forward requests from base URL (http://arch.homework) to service
+* Use external prometheus-operator and nginx-controller helm charts
+* Deploy application with custom helm chart
+  * Servicemonitor config file is part of helm chart
+  * Dashboard config file is part of helm chart
+* Create a standalone job with stress test
+  * Should produce rps rate 5-20
+  * Should be infinity
+  * Should request all API methods in application
+  * Should apply service name via ENV or helm value
+  * Should request service via ingress-controller    
+* Dashboard snapshots with at least 5-10 minutes stress test activity 
 #### Optional
-* Describe deployment with helm chart 
-* Use official DB helm chart as dependency
-
+* Configure database prometheus exporter. Add db metrics to dashboard
+* Add kubernetes system metrics to dashboard
+  * CPU usage
+  * Memory usage
 
 ### Pre-install
 Install, configure & run [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
 Install and configure [helm](https://helm.sh/docs/intro/install/)
 
+Add result of ```echo "$(minikube ip) arch.homework"``` to /etc/hosts and restart network
+
+Create directory ```mkdir ./helmchart``` and go to it
+
+Start minikube and set new namespace ```kubectl create namespace monitoring``` followed by ```kubectl config set-context --namespace monitoring --current```
+
+Install external helm charts 
+* helm repo add bitnami https://charts.bitnami.com/bitnami
+* helm install prom -f ./[prometheus.yaml](https://github.com/DmitryAEfimov/otusSoftwareArchitect/blob/lesson07_prometheus/deployment/prometheus.yaml) stable/prometheus-operator --atomic
+
+* helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+* helm install nginx -f ./[nginx-ingress.yaml](https://github.com/DmitryAEfimov/otusSoftwareArchitect/blob/lesson07_prometheus/deployment/nginx-ingress.yaml) stable/nginx-ingress --atomic
+ 
 ### Install & Run
-Download [app-chart](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson05_minikubeadv/deployment) to local host
+Download [deployment directory](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson07_prometheus/deployment) to local host
 
-Execute command: ``` cd <workdir> ``` followed by ``` helm install hw-lesson5 ./app-chart/ ``` to run application
+Execute command: ```cd <deployment directory>``` followed by ```helm install app ./app-chart/``` to run application
 
-Execute command: ``` helm uninstall hw-lesson5 ``` to stop application  
+Execute command: ```helm uninstall app``` to stop application  
 
-### Usage
-Before your start you have to resolve host arch.homework. It can be done with
-* add result of ``` echo "$(minikube ip) arch.homework" ``` to /etc/hosts and restart network
-* Add header ``` Host: arch.homework ``` and send requests to result of ``` echo $(minikube ip) ```
+### Stress test
 
-User body example value ```{"id": "2122", "userName": "johndoe589", "firstName": "John", "lastName": "Doe", "email": "bestjohn@doe.com", "phoneNumber": "+71002003040"}```
+Download [stresstest directory](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson07_prometheus/stresstest) to local host
 
-#### Supported operations
-* Create new user
-  * POST /users
-* Update existing user
-  * PUT /users?id={id}
-* Delete existing user
-  * DELETE /users?id={id}    
-* Get user info
-  * GET /users?id={id}
-* Get all users info
-  * GET /users
-  
-See examples in [postman test](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson05_minikubeadv/src/test/resources/postman)
+Execute command: ```cd <stresstest directory>``` followed by ```helm install stress ./stresstest-chart/``` to begin test
+
+Execute command: ```helm uninstall stress``` to stop test
+
+#### Results
+See monitoring results in [screenshots](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson07_prometheus/stresstest/result)

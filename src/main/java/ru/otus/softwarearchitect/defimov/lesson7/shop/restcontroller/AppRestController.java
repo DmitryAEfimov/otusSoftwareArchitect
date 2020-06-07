@@ -33,7 +33,7 @@ public class AppRestController {
 		this.messageSource = messageSource;
 	}
 
-	@PostMapping(value = "users")
+	@PostMapping(value = "users", produces = MediaType.APPLICATION_JSON_VALUE)
 	public User createUser(@RequestBody User user) {
 		if (Objects.nonNull(user.getId())) {
 			throw new UserChangeException(messageSource.getMessage("userIdAlreadyExists", null, Locale.US));

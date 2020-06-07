@@ -68,6 +68,54 @@ postgresql:
   postgresqlPassword: passwd
   service:
     port: "5432"
+  postgresqlExtendedConf:
+    sharedPreloadLibraries: "pg_stat_statements"
+    pgStatStatements.max: "10000"
+    pgStatStatements.track: "all"
+  initdbScripts:
+    db-init.sql: |
+      CREATE EXTENSION pg_stat_statements;
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: monitoring
+      interval: 30s
+      scrapeTimeout: 10s
+    customMetrics:
+      pg_database:
+        query: "SELECT d.datname AS name, CASE WHEN pg_catalog.has_database_privilege(d.datname, 'CONNECT') THEN pg_catalog.pg_database_size(d.datname) ELSE 0 END AS size_bytes FROM pg_catalog.pg_database d where d.datname = 'postgres'"
+        metrics:
+          - name:
+              usage: "LABEL"
+              description: "Name of the database"
+          - size_bytes:
+              usage: "GAUGE"
+              description: "Size of the database in bytes"
+      pg_stat_statements:
+        query: "SELECT db.datname, queryid, sum(calls) as calls, sum(total_time) as total_time_seconds, sum(min_time) as min_time_seconds, sum(max_time) as max_time_seconds, sum(mean_time) as mean_time_seconds FROM pg_stat_statements JOIN pg_database db ON (dbid=db.oid) where db.datname = 'postgres' group by db.datname, queryid"
+        metrics:
+          - queryid:
+              usage: "LABEL"
+              description: "Query ID"
+          - datname:
+              usage: "LABEL"
+              description: "Database name"
+          - calls:
+              usage: "COUNTER"
+              description: "Number of times executed"
+          - total_time:
+              usage: "COUNTER"
+              description: "Total time spent in the statement, in seconds"
+          - min_time:
+              usage: "GAUGE"
+              description: "Minimum time spent in the statement, in seconds"
+          - max_time:
+              usage: "GAUGE"
+              description: "Maximum time spent in the statement, in seconds"
+          - mean_time:
+              usage: "GAUGE"
+              description: "Mean time spent in the statement, in seconds"
 
 resources: {}
 # We usually recommend not to specify default resources and to leave this as a conscious

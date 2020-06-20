@@ -6,14 +6,16 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.otus.softwarearchitect.defimov.lesson15.model.Product;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.stream.Stream;
 
 @Repository
-public interface ProductRepository extends MongoRepository<Product, UUID> {
-	@Query("{name : {$regex: ?0, $options: 'i' }}")
-	List<Product> findByName(String productName, Pageable page);
+public interface ProductRepository extends MongoRepository<Product, String> {
+	@Query("{name : {$regex: ?0, $options: 'i' }, description : {$regex: ?1, $options: 'i' }}")
+	Stream<Product> findByNameOrDescription(String productName, String description, Pageable pageable);
 
-	@Query("{name : {$regex: ?0, $options: 'i' }}")
-	List<Product> findByDescription(String description, Pageable page);
+	@Query("{vendorCode : {$regex: ?0, $options: 'i'}}")
+	Stream<Product> findByVendorCodeRegex(String vendorCode);
+
+	@Query("{vendorCode : vendorCode}")
+	Product findByVendorCode(String vendorCode);
 }

@@ -10,11 +10,11 @@ import java.util.stream.Stream;
 
 @Repository
 public interface ProductRepository extends MongoRepository<Product, String> {
-	@Query("{name : {$regex: ?0, $options: 'i' }, description : {$regex: ?1, $options: 'i' }}")
+	@Query("{ $or: [ {name : {$regex: ?0, $options: 'i' }, description : {$regex: ?1, $options: 'i' }} ] }")
 	Stream<Product> findByNameOrDescription(String productName, String description, Pageable pageable);
 
 	@Query("{vendorCode : {$regex: ?0, $options: 'i'}}")
-	Stream<Product> findByVendorCodeRegex(String vendorCode);
+	Stream<Product> findByVendorCodeRegex(String vendorCode, Pageable pageable);
 
 	@Query("{vendorCode : vendorCode}")
 	Product findByVendorCode(String vendorCode);

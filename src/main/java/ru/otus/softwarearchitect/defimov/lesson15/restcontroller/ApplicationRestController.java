@@ -21,6 +21,7 @@ import ru.otus.softwarearchitect.defimov.lesson15.restcontroller.exception.Produ
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,13 +32,14 @@ public class ApplicationRestController {
 
 	private final ProductRepository productRepository;
 	private final MessageSource messageSource;
-	private final int resCnt;
+	private final PageRequest page;
+
 
 	public ApplicationRestController(ProductRepository productRepository, MessageSource messageSource,
 									 @Value("${app.resultCount}") int resCnt) {
 		this.productRepository = productRepository;
 		this.messageSource = messageSource;
-		this.resCnt = resCnt;
+		page = PageRequest.of(0, resCnt);
 	}
 
 	@PostMapping(value = "products", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -67,11 +69,22 @@ public class ApplicationRestController {
 		}
 	}
 
-	@GetMapping(value = "products/search", params = {"name", "desc"}, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Product> searchProduct(@RequestParam(name = "name") String productName,
-									   @RequestParam(name = "desc") String productDesc) {
-		PageRequest page = PageRequest.of(0, resCnt);
-		return productRepository.findByNameOrDescription(productName, productDesc, page)
+	@GetMapping(value = "products/search", params = {"!code"}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Product> searchProduct(@RequestParam(name = "name", required = false) String productName,
+									   @RequestParam(name = "desc", required = false) String productDesc) {
+		return productRepository.findByNameOrDescription(Objects.requireNonNullElse(productName, ".*"),
+				Objects.requireNonNullElse(productDesc, ".*"), page)
 								.sorted(Comparator.comparing(Product::getName)).collect(Collectors.toList());
+	}
+
+	@GetMapping(value = "products/search", params = {"code"}, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Product> searchProduct(@RequestParam(name = "code") String vendorCode) {
+		return productRepository.findByVendorCodeRegex(vendorCode, page).sorted(Comparator.comparing(Product::getName))
+								.collect(Collectors.toList());
+	}
+
+	@GetMapping(value = "products/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Product> searchProduct() {
+		return productRepository.findAll(page).toList();
 	}
 }

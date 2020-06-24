@@ -13,7 +13,7 @@ public class Product {
 	@Id
 	private String id;
 	@Indexed
-	@JsonProperty(required = true)
+	@JsonProperty(value = "code", required = true)
 	private String vendorCode;
 	@Indexed
 	private String name;

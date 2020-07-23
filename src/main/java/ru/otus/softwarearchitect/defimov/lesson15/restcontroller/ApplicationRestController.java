@@ -28,23 +28,25 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@Timed( value = "app_request",
-		histogram = true )
+@Timed(value = "app_request",
+		histogram = true)
 public class ApplicationRestController {
 
 	private final ProductRepository productRepository;
 	private final MessageSource messageSource;
 	private final PageRequest page;
+	private final boolean simulateDBDelay;
 
 	public ApplicationRestController(ProductRepository productRepository,
-	                                 MessageSource messageSource,
-	                                 @Value( "${app.resultCount}" ) int resCnt) {
+			MessageSource messageSource,
+			@Value("${app.resultCount}") int resCnt, @Value("${app.simulateDBDelay}") boolean simulateDBDelay) {
 		this.productRepository = productRepository;
 		this.messageSource = messageSource;
-		page = PageRequest.of(0, resCnt);
+		this.page = PageRequest.of(0, resCnt);
+		this.simulateDBDelay = simulateDBDelay;
 	}
 
-	@PostMapping( value = "products", produces = MediaType.APPLICATION_JSON_VALUE )
+	@PostMapping(value = "products", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Product createProduct(@RequestBody Product product) {
 		Optional<Product> persistProduct = productRepository.findByVendorCodeIgnoreCase(product.getVendorCode());
 		if (persistProduct.isPresent()) {
@@ -61,16 +63,23 @@ public class ApplicationRestController {
 		}
 	}
 
-	@Cacheable( value = "product", key = "#vendorCode.toLowerCase()" )
-	@GetMapping( value = "products/{code}", produces = MediaType.APPLICATION_JSON_VALUE )
-	public Product searchProduct(@PathVariable( name = "code" ) String vendorCode) {
+	@Cacheable(value = "product", key = "#vendorCode.toLowerCase()")
+	@GetMapping(value = "products/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Product searchProduct(@PathVariable(name = "code") String vendorCode) {
+		if (simulateDBDelay) {
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				// nothing
+			}
+		}
 		return productRepository.findByVendorCodeIgnoreCase(vendorCode).orElseThrow(
 				() -> new ProductNotFoundException(messageSource.getMessage("productNotFound", null, Locale.US)));
 	}
 
-	@CacheEvict( value = "product", key = "#vendorCode.toLowerCase()" )
-	@DeleteMapping( value = "products/{code}" )
-	public void deleteProduct(@PathVariable( name = "code" ) String vendorCode) {
+	@CacheEvict(value = "product", key = "#vendorCode.toLowerCase()")
+	@DeleteMapping(value = "products/{code}")
+	public void deleteProduct(@PathVariable(name = "code") String vendorCode) {
 		Product product = productRepository.findByVendorCodeIgnoreCase(vendorCode).orElseThrow(
 				() -> new ProductNotFoundException(messageSource.getMessage("productNotFound", null, Locale.US)));
 
@@ -81,17 +90,17 @@ public class ApplicationRestController {
 		}
 	}
 
-	@GetMapping( value = "products/search", produces = MediaType.APPLICATION_JSON_VALUE )
+	@GetMapping(value = "products/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Product> searchProduct(
-			@RequestParam( name = "name", required = false ) String productName,
-			@RequestParam( name = "desc", required = false ) String productDesc) {
+			@RequestParam(name = "name", required = false) String productName,
+			@RequestParam(name = "desc", required = false) String productDesc) {
 		return productRepository.findByNameOrDescription(Objects.requireNonNullElse(productName, ".*"),
 				Objects.requireNonNullElse(productDesc, ".*"), page)
-		                        .sorted(Comparator.comparing(Product::getName)).collect(
+				.sorted(Comparator.comparing(Product::getName)).collect(
 						Collectors.toList());
 	}
 
-	@GetMapping( value = "products", produces = MediaType.APPLICATION_JSON_VALUE )
+	@GetMapping(value = "products", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Product> searchProduct() {
 		return productRepository.findAll(page).toList();
 	}

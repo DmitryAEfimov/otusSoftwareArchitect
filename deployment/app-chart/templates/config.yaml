@@ -8,6 +8,9 @@ data:
       "server": {
         "port": {{ .Values.service.containerPort | quote }}
       },
+      "app": {
+        "simulateDBDelay": {{ .Values.application.simulateDBDelay | quote }}
+      },
       "spring": {
         "data": {
           "mongodb": {
@@ -16,13 +19,13 @@ data:
         },
         "cache": {
           "type":
-    {{- if .Values.cache.enabled -}}
+    {{- if .Values.application.cache.enabled -}}
       {{ "caffeine" | quote | indent 1 }}
     {{- else -}}
       {{ "none" | quote | indent 1 }}
     {{- end }},
           "caffeine": {
-            "spec": "maximumSize={{ .Values.cache.maxSize }},expireAfterAccess={{ .Values.cache.expire }}"
+            "spec": {{ printf "maximumSize=%s,expireAfterAccess=%s" ( .Values.application.cache.maxSize | toString ) .Values.application.cache.expire | quote }}
           }
         }
       }

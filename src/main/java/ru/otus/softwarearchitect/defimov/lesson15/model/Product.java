@@ -8,12 +8,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-@Document( collection = "products" )
+@Document(collection = "products")
 public class Product {
 	@Id
 	private String id;
 	@Indexed
-	@JsonProperty( value = "code", required = true )
+	@JsonProperty(value = "code", required = true)
 	private String vendorCode;
 	@Indexed
 	private String name;

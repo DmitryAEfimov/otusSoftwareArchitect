@@ -1,7 +1,0 @@
-mongodbDatabase: mongodb
-mongodbUsername: mongo
-mongodbPassword: passwd
-service:
-  name: mongodb-svc
-ingress:
-  enabled: true

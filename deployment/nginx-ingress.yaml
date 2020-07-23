@@ -11,9 +11,6 @@ controller:
 
   service:
     type: NodePort
-    nodePorts:
-      tcp:
-        27017: "product/mongodb-svc:27017"
 
   metrics:
     enabled: true

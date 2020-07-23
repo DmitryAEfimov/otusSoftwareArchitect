@@ -26,7 +26,7 @@ Start minikube and set new namespace ```kubectl create namespace product``` foll
 
 Install external helm charts 
 * helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-* helm install nginx -f ./[nginx-ingress.yaml](https://github.com/DmitryAEfimov/otusSoftwareArchitect/blob/lesson07_prometheus/deployment/nginx-ingress.yaml) stable/nginx-ingress --atomic
+* helm install nginx -f ./[nginx-ingress.yaml](https://github.com/DmitryAEfimov/otusSoftwareArchitect/blob/lesson15_cache/deployment/nginx-ingress.yaml) stable/nginx-ingress --atomic
  
 ### Install & Run
 Download [deployment directory](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson15_cache/deployment) to local host
@@ -47,7 +47,7 @@ Optionally set helm variable ```application.simulateDBDelay=true``` to simulate 
   * DELETE /products/{vendorCode}. Force cache evict    
 * Partial match & case insensitive searh by name and/or description
   * GET /products/search[?(name={name})|desc={desc})]
-* Search by vendorCode. Force caching 
+* Search by vendor code. Force caching 
   * GET /products/{vendorCode}
 
 See [postman tests](https://github.com/DmitryAEfimov/otusSoftwareArchitect/tree/lesson15_cache/src/test/resources/postman) for details

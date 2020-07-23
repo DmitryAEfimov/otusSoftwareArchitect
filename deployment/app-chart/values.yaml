@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 3
+replicaCount: 1
 
 image:
   repository: defimov/app
@@ -83,13 +83,16 @@ tolerations: []
 
 affinity: {}
 
-cache:
-  enabled: false
-  maxSize: 500
-  expire: 600s
+application:
+  simulateDBDelay: true
+  cache:
+    enabled: false
+    maxSize: 500
+    expire: 600s
 
 mongodb:
   enabled: true
+  useStatefulSet: true
   auth:
     database: mongodb
     username: mongo

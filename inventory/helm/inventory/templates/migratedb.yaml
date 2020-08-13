@@ -1,0 +1,63 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-migrate-db"
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    metadata:
+      name: "{{ .Release.Name }}"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+      restartPolicy: Never
+      initContainers:
+        - name: check-db-ready
+          image: "alpine:latest"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - sh
+            - "-c"
+            - |
+              apk add postgresql-client && until pg_isready -h {{ (include "postgresql.fullname" .) | quote }} -p {{ .Values.postgresql.service.port | quote }}; do echo waiting for database; sleep 2; done;
+      containers:
+        - name: migrate-db
+          image: "{{ .Values.image.flywayRepository }}:latest"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - mountPath: flyway/migration
+              name: flyway-migration-scripts
+          envFrom:
+            - secretRef:
+                name: "{{ include "inventory.fullname" . }}-secret"
+          env:
+            - name: SCRIPT_LOCATION
+              value: 'filesystem:/flyway/migration'
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: "{{ include "inventory.fullname" . }}-config"
+                  key: url
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: "{{ include "inventory.fullname" . }}-config"
+                  key: dbuser
+      volumes:
+        - name: flyway-migration-scripts
+          configMap:
+            name: flyway-cm
+  backoffLimit: 0

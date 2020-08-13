@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "ab93545f-16e0-41e3-8cd7-4ccb3a9a583e",
+		"name": "Project. Device-library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create cisco switch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "427dbe4b-aa73-4d9f-8cc2-ad9e7b2a24c2",
+						"exec": [
+							" var responseJSON = JSON.parse(responseBody)",
+							" pm.collectionVariables.set(\"ciscoDeviceId\", responseJSON[\"uuid\"])"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"vendor\": \"Cisco\", \"modelName\": \"WS-C3850-48T-L\", \"deviceClass\": \"switch\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/device_library/devices",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"device_library",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create huawei switch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b1315933-827e-44b3-981f-a81662a8445d",
+						"exec": [
+							" var responseJSON = JSON.parse(responseBody)",
+							" pm.collectionVariables.set(\"huaweiDeviceId\", responseJSON[\"uuid\"])"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"vendor\": \"Huawei\", \"modelName\": \"MA5603T\", \"deviceClass\": \"switch\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/device_library/devices",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"device_library",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update huawei switch as msan",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\"msan\"",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/device_library/devices/{{huaweiDeviceId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"device_library",
+						"devices",
+						"{{huaweiDeviceId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all devices",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8acd114f-832c-467c-8e32-b522cb906c57",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/device_library/devices",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"device_library",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete cisco switch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9589e8e7-0ee8-4843-aa7b-b662b1b8a4b4",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/device_library/devices/{{deviceId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"device_library",
+						"devices",
+						"{{deviceId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b2698c1c-ad16-4154-848b-9952e21f0c03",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "f86169af-9a58-4e24-866c-0a578faa0b27",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "b009c3e2-0d8c-49d1-a728-bc2879cbc8e2",
+			"key": "baseUrl",
+			"value": "arch.homework",
+			"type": "string"
+		},
+		{
+			"id": "6ea5376b-d552-4b3c-82f9-5840209db0ca",
+			"key": "deviceId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "ad96206a-e222-42da-995f-205164cb2fe5",
+			"key": "ciscoDeviceId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "5ddce68e-3545-4512-9042-75075f17ee43",
+			"key": "huaweiDeviceId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

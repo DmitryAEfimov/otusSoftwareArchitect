@@ -18,6 +18,5 @@ RUN wget https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${FLYWAY
   && rm flyway-commandline-${FLYWAY_VERSION}.tar.gz
 
 COPY config/flyway.conf config/flyway.conf
-COPY migration/ sql/
 
-CMD /flyway/flyway -url=${DB_URL} -user=${DB_USER} -password=${DB_PASSWORD} migrate
+CMD /flyway/flyway -url=${DB_URL} -user=${DB_USER} -password=${DB_PASSWORD} -locations=${SCRIPT_LOCATION} migrate

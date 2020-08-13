@@ -38,14 +38,14 @@ spec:
               value: {{ .Values.postgresql.postgresqlDatabase | quote }}
           envFrom:
             - secretRef:
-                name: "{{ include "app-chart.fullname" . }}-secret"
+                name: "{{ include "device-library.fullname" . }}-secret"
           command:
             - sh
             - "-c"
             - |
               apk add postgresql-client && \
               until [[ "`PGPASSWORD=$DB_PASSWORD \
-              psql -XAt -h $DB_HOSTNAME -U $DB_USER -c 'select version from flyway_schema_history' $DB_NAME`" == "$DB_VERSION" ]];
+              psql -XAt -h $DB_HOSTNAME -U $DB_USER -c 'select max(version) from flyway_schema_history' $DB_NAME`" == "$DB_VERSION" ]];
               do
                 echo waiting for database;
                 sleep 2;

@@ -1,5 +1,6 @@
 package ru.otus.softwarearchitect.defimov.devicelibrary.rest;
 
+import com.google.common.collect.ImmutableList;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -73,7 +74,8 @@ public class RequestController {
 
 	@GetMapping(value = "devices", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Device> findAll() {
-		return deviceRepository.findAll();
+
+		return ImmutableList.copyOf(deviceRepository.findAll());
 	}
 
 	private Device findByUuid(UUID id) {

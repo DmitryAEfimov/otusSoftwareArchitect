@@ -1,5 +1,9 @@
 package ru.otus.softwarearchitect.defimov.devicelibrary.model;
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -9,13 +13,18 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
 @Table(name = "MODELS")
+@TypeDef(
+		name = "pgsql_enum",
+		typeClass = PostgreSQLEnumType.class
+)
 @Access(AccessType.FIELD)
+@NamedQuery(name = "findAll", query = "from Device")
 public class Device {
 	private UUID uuid;
 
@@ -24,6 +33,7 @@ public class Device {
 	@Column(name = "MODEL_NAME", nullable = false)
 	private String modelName;
 	@Enumerated(EnumType.STRING)
+	@Type(type = "pgsql_enum")
 	private DeviceClass deviceClass;
 
 	@Id

@@ -1,7 +1,7 @@
 ### Build Java Application image ###
 FROM maven:3.6.3-jdk-11 as builder
 
-WORKDIR /tmp/device-libraty
+WORKDIR /tmp/device-library
 
 COPY src/ ./src/
 COPY pom.xml .
@@ -14,12 +14,12 @@ MAINTAINER  Dmitry Efimov <d.efimov@argustelecom.ru>
 
 EXPOSE 8000
 
-WORKDIR /opt/device-libraty
-COPY --from=builder /tmp/app/target/device-libraty.jar .
+WORKDIR /opt/device-library
+COPY --from=builder /tmp/device-library/target/device-library.jar .
 
 RUN groupadd -g 999 appuser && \
     useradd -r -u 999 -g appuser appuser && \
-    chmod 644 app.jar
+    chmod 644 device-library.jar
 USER appuser
 
-CMD java -Dspring.application.json=${SPRING_APPLICATION_JSON} -jar device-library.jar
+CMD java -Dspring.application.json="${SPRING_APPLICATION_JSON}" -jar device-library.jar

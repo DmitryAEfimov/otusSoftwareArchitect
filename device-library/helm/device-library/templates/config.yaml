@@ -22,7 +22,16 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: "{{ include "app-chart.fullname" . }}-secret"
+  name: "{{ include "device-library.fullname" . }}-secret"
 type: Opaque
 data:
   DB_PASSWORD: {{ .Values.postgresql.postgresqlPassword | b64enc | trimAll "\n" | quote }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: flyway-cm
+  labels:
+    name: flyway-cm
+data:
+  {{- (.Files.Glob "migration/**").AsConfig | nindent 2 }}

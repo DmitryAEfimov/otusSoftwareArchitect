@@ -5,7 +5,7 @@ metadata:
   labels:
     grafana-dashboard: "1"
 data:
-  grafana-app-dashboard.json: |-
+  grafana-device-library-app-dashboard.json: |-
     {
       "annotations": {
         "list": [
@@ -68,7 +68,7 @@ data:
         "steppedLine": false,
         "targets": [
         {
-          "expr": "sum by (pod, container) (rate(container_memory_working_set_bytes{namespace=\"monitoring\", container=~\"app-(chart|postgresql)\"}[5m]))",
+          "expr": "sum by (pod, container) (rate(container_memory_working_set_bytes{namespace=\"devicelibrary\", container=~\"device-library-app-(chart|postgresql)\"}[5m]))",
           "interval": "",
           "legendFormat": "{{"{{"}}pod}}-{{"{{"}}container}}",
           "refId": "A"
@@ -156,7 +156,7 @@ data:
         "steppedLine": false,
         "targets": [
         {
-          "expr": "rate(container_cpu_usage_seconds_total{namespace=\"monitoring\", container=~\"app-(chart|postgresql)\"}[5m])",
+          "expr": "rate(container_cpu_usage_seconds_total{namespace=\"devicelibrary\", container=~\"device-library-app-(chart|postgresql)\"}[5m])",
           "interval": "",
           "legendFormat": "{{"{{"}}pod}}-{{"{{"}}container}}",
           "refId": "A"
@@ -1263,7 +1263,7 @@ data:
       },
       "version": 2
     }
-  grafana-appdb-dashboard.json: |-
+  grafana-device-library-appdb-dashboard.json: |-
     {
       "annotations": {
         "list": [

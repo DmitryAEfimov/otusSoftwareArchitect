@@ -33,6 +33,7 @@ public class Device {
 	@Column(name = "MODEL_NAME", nullable = false)
 	private String modelName;
 	@Enumerated(EnumType.STRING)
+	@Column(name = "DEVICE_CLASS")
 	@Type(type = "pgsql_enum")
 	private DeviceClass deviceClass;
 

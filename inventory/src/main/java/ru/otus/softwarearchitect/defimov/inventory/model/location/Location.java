@@ -1,6 +1,6 @@
 package ru.otus.softwarearchitect.defimov.inventory.model.location;
 
-import ru.otus.softwarearchitect.defimov.inventory.model.ne.NetworkElement;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -9,10 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -36,9 +34,6 @@ public class Location {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
-
-	@OneToMany(mappedBy = "location")
-	private Set<NetworkElement> networkElements;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -66,10 +61,6 @@ public class Location {
 
 	public String getDescription() {
 		return description;
-	}
-
-	public Set<NetworkElement> getNetworkElements() {
-		return networkElements;
 	}
 
 	@Override public boolean equals(Object o) {

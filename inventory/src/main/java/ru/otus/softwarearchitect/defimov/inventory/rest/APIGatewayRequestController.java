@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.softwarearchitect.defimov.inventory.model.location.Location;
+import ru.otus.softwarearchitect.defimov.inventory.model.location.LocationRepository;
 import ru.otus.softwarearchitect.defimov.inventory.model.ne.NetworkElement;
 import ru.otus.softwarearchitect.defimov.inventory.model.ne.NetworkElementRepository;
 import ru.otus.softwarearchitect.defimov.inventory.rest.exception.NetworkElementChangeException;
@@ -27,10 +28,13 @@ import java.util.UUID;
 		histogram = true)
 public class APIGatewayRequestController {
 	private final NetworkElementRepository neRepository;
+	private final LocationRepository locationRepository;
 	private final MessageSource messageSource;
 
-	public APIGatewayRequestController(NetworkElementRepository deviceRepository, MessageSource messageSource) {
+	public APIGatewayRequestController(NetworkElementRepository deviceRepository, LocationRepository locationRepository,
+			MessageSource messageSource) {
 		this.neRepository = deviceRepository;
+		this.locationRepository = locationRepository;
 		this.messageSource = messageSource;
 	}
 
@@ -41,16 +45,19 @@ public class APIGatewayRequestController {
 		}
 
 		try {
+			Location entityLocation = findOrCreateLocation(networkElement.getLocation());
+			networkElement.setLocation(entityLocation);
 			return neRepository.save(networkElement);
 		} catch (DataIntegrityViolationException ex) {
-			throw new NetworkElementChangeException(Optional.ofNullable(ex.getRootCause()).orElse(ex).getMessage());
+			throw new NetworkElementChangeException(
+					Optional.of(ex.getMostSpecificCause()).orElse(ex).getMessage());
 		}
 	}
 
 	@PutMapping(value = "network_elements/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public NetworkElement updateDevice(@PathVariable(name = "id") UUID id, @RequestBody Location location) {
+	public NetworkElement updateNetworkElement(@PathVariable(name = "id") UUID id, @RequestBody Location location) {
 		NetworkElement entityNe = findById(id);
-		entityNe.setLocation(location);
+		entityNe.setLocation(findOrCreateLocation(location));
 
 		try {
 			return neRepository.save(entityNe);
@@ -60,21 +67,22 @@ public class APIGatewayRequestController {
 	}
 
 	@DeleteMapping(value = "network_elements/{id}")
-	public void deleteUser(@PathVariable(name = "id") UUID id) {
-		NetworkElement user = findById(id);
+	public void deleteNetworkElement(@PathVariable(name = "id") UUID id) {
+		NetworkElement networkElement = findById(id);
 
 		try {
-			neRepository.delete(user);
+			neRepository.delete(networkElement);
 		} catch (DataIntegrityViolationException ex) {
 			throw new NetworkElementChangeException(Optional.ofNullable(ex.getRootCause()).orElse(ex).getMessage());
 		}
 	}
 
-	private NetworkElement findById(UUID id) {
-		NetworkElement ne = new NetworkElement();
-		ne.setId(id);
+	private Location findOrCreateLocation(Location location) {
+		return locationRepository.findOne(Example.of(location)).orElseGet(() -> locationRepository.save(location));
+	}
 
-		return neRepository.findById(Example.of(ne)).orElseThrow(() -> new NetworkElementNotFoundException(
+	private NetworkElement findById(UUID id) {
+		return neRepository.findById(id).orElseThrow(() -> new NetworkElementNotFoundException(
 				messageSource.getMessage("neNotFound", new Object[] { id }, Locale.US)));
 	}
 }

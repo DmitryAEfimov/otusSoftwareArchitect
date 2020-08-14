@@ -1,0 +1,145 @@
+{
+	"info": {
+		"_postman_id": "82d1fd76-e86c-4a5e-a93f-f43b9310c571",
+		"name": "Project. Inventory",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create ne",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c8955bfc-3682-4217-a535-36ec88a3a05f",
+						"exec": [
+							" var responseJSON = JSON.parse(responseBody)",
+							" pm.collectionVariables.set(\"networkElementId\", responseJSON[\"id\"])"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"snmpAgentName\": \"nwt-spb\",\n\t\"ip\": \"192.168.103.33\",\n\t\"location\": {\n\t\t\"address\": \"Saint-Petersburg, Moskovskaya av, 45\",\n\t\t\"longitude\": 30.317952,\n\t\t\"latitude\": 59.912039\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/inventory/network_elements",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"inventory",
+						"network_elements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "relocate ne",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"longitude\": 30.668680,\n\t\"latitude\": 59.574610,\n\t\"description\": \"M-11, 649 km, punkt oplati\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/inventory/network_elements/{{networkElementId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"inventory",
+						"network_elements",
+						"{{networkElementId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete ne",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/inventory/network_elements/{{networkElementId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"inventory",
+						"network_elements",
+						"{{networkElementId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "9b14e7a2-f69d-44b2-8d43-a14439905e3b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "d2e507b6-eadd-41ef-a683-d4ea1b137bdf",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "91b46974-2ecf-4236-bf4e-271ff2392d7b",
+			"key": "baseUrl",
+			"value": "arch.homework",
+			"type": "string"
+		},
+		{
+			"id": "a5e29c36-803c-48c3-ae98-b317259f1a3f",
+			"key": "networkElementId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

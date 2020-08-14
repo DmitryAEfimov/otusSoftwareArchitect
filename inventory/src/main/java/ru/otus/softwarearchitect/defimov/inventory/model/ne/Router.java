@@ -1,20 +1,18 @@
 package ru.otus.softwarearchitect.defimov.inventory.model.ne;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ROUTERS")
-@Access(AccessType.FIELD)
 public class Router extends Device {
 	protected Router() {
 		//		JPA
 	}
 
-	public Router(NetworkElementId id, String vendor, String model, int ethPortsCnt, String ethPortsSpeed,
+	public Router(UUID id, String vendor, String model, int ethPortsCnt, String ethPortsSpeed,
 			int opticalPortsCnt, String opticalPortsSpeed) {
 		super(id, vendor, model);
 		this.ethPortsCnt = ethPortsCnt;

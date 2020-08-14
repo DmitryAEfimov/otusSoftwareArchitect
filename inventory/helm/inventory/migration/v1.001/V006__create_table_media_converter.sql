@@ -1,6 +1,6 @@
 CREATE TABLE media_converters
 (
-    id                  uuid        DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id                  uuid PRIMARY KEY,
     vendor              VARCHAR(64)  NOT NULL,
     model               VARCHAR(256) NOT NULL,
     ports_cnt           INT         DEFAULT 1,

@@ -1,6 +1,6 @@
 create table streets
 (
-    id            uuid default uuid_generate_v4(),
+    id            uuid default uuid_generate_v4() primary key,
     region_id     uuid,
     settlement_id uuid,
     street_name   varchar(256) not null,

@@ -1,6 +1,6 @@
 create table settlements
 (
-    id              uuid default uuid_generate_v4(),
+    id              uuid default uuid_generate_v4() primary key,
     region_id       uuid         not null,
     settlement_name varchar(256) not null,
     settlement_type t_settlement_type_enum,

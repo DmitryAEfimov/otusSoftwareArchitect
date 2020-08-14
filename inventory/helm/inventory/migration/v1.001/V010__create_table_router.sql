@@ -1,6 +1,6 @@
 create table routers
 (
-    id                uuid default uuid_generate_v4(),
+    id                uuid default uuid_generate_v4() primary key,
     vendor            varchar(64)  not null,
     model             varchar(256) not null,
     eth_ports_cnt     int  default 0,

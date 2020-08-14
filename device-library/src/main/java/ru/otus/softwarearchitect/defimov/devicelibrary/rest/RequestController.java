@@ -39,7 +39,7 @@ public class RequestController {
 	@PostMapping(value = "devices", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Device createDevice(@RequestBody Device device) {
 		if (Objects.nonNull(device.getUuid())) {
-			throw new DeviceChangeException(messageSource.getMessage("userIdAlreadyExists", null, Locale.US));
+			throw new DeviceChangeException(messageSource.getMessage("deviceAlreadyExists", null, Locale.US));
 		}
 
 		try {
@@ -62,11 +62,11 @@ public class RequestController {
 	}
 
 	@DeleteMapping(value = "devices/{id}")
-	public void deleteUser(@PathVariable(name = "id") UUID id) {
-		Device user = findByUuid(id);
+	public void deleteDevice(@PathVariable(name = "id") UUID id) {
+		Device device = findByUuid(id);
 
 		try {
-			deviceRepository.delete(user);
+			deviceRepository.delete(device);
 		} catch (DataIntegrityViolationException ex) {
 			throw new DeviceChangeException(Optional.ofNullable(ex.getRootCause()).orElse(ex).getMessage());
 		}
@@ -80,6 +80,6 @@ public class RequestController {
 
 	private Device findByUuid(UUID id) {
 		return deviceRepository.findById(id).orElseThrow(() -> new DeviceNotFoundException(
-				messageSource.getMessage("userNotFound", new Object[] { id }, Locale.US)));
+				messageSource.getMessage("deviceNotFound", new Object[] { id }, Locale.US)));
 	}
 }

@@ -41,7 +41,7 @@ service:
   containerPort: "8000"
   serviceName: inventory-app-service
   database:
-    version: "011"
+    version: "006"
 
 ingress:
   enabled: true

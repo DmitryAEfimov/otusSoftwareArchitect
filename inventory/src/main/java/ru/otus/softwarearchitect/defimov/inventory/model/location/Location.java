@@ -6,15 +6,11 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -28,12 +24,9 @@ import java.util.UUID;
 @Access(AccessType.FIELD)
 public class Location {
 	private UUID id;
-	@Transient
-	private GeoPoint point;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "BUILDING_ID")
-	private Building building;
+	@Column(name = "ADDRESS")
+	private String address;
 
 	@Column(name = "LONGITUDE")
 	private Double longitude;
@@ -59,26 +52,24 @@ public class Location {
 		this.id = id;
 	}
 
-	public Building getBuilding() {
-		return building;
+	public String getAddress() {
+		return address;
 	}
 
-	public GeoPoint getPoint() {
-		if (point == null) {
-			point = new GeoPoint(latitude, longitude);
-		}
+	public Double getLatitude() {
+		return latitude;
+	}
 
-		return point;
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public Set<NetworkElement> getNetworkElements() {
 		return networkElements;
-	}
-
-	public void setPoint(GeoPoint point) {
-		this.point = point;
-		this.longitude = point.getLongitude();
-		this.latitude = point.getLatitude();
 	}
 
 	@Override public boolean equals(Object o) {
@@ -89,7 +80,7 @@ public class Location {
 
 		Location location = (Location) o;
 
-		if (!Objects.equals(building, location.building))
+		if (!Objects.equals(address, location.address))
 			return false;
 		if (!Objects.equals(longitude, location.longitude))
 			return false;
@@ -97,7 +88,7 @@ public class Location {
 	}
 
 	@Override public int hashCode() {
-		int result = building != null ? building.hashCode() : 0;
+		int result = address != null ? address.hashCode() : 0;
 		result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
 		result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
 		return result;

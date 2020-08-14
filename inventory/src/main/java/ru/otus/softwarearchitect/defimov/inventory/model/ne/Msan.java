@@ -20,10 +20,10 @@ public class Msan extends Device {
 		this.opticalSlotsCnt = opticalSlotsCnt;
 	}
 
-	@Column(name = "DSL_SlOT_CNT")
+	@Column(name = "DSL_SlOTS_CNT")
 	private int dslSlotsCnt;
 
-	@Column(name = "OPTICAL_SlOT_CNT")
+	@Column(name = "OPTICAL_SlOTS_CNT")
 	private int opticalSlotsCnt;
 
 	public int getDslSlotsCnt() {

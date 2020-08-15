@@ -15,7 +15,7 @@ MAINTAINER  Dmitry Efimov <d.efimov@argustelecom.ru>
 EXPOSE 8000
 
 WORKDIR /opt/discovery-mock
-COPY --from=builder /tmp/app/target/discovery-mock.jar .
+COPY --from=builder /tmp/discovery-mock/target/discovery-mock.jar .
 
 RUN groupadd -g 999 appuser && \
     useradd -r -u 999 -g appuser appuser && \

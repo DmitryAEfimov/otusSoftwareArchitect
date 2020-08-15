@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "7b6d334c-ed06-4adf-a35a-82468843c4e9",
+		"name": "DiscoveryReportStub",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "app init data request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a985bcf1-bf9c-4e21-8c9e-a333d30d66af",
+						"exec": [
+							" var responseJSON = JSON.parse(responseBody)",
+							" pm.collectionVariables.set(\"reportId\", responseJSON[\"reportId\"])"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/discovery/init?count=20",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"discovery",
+						"init"
+					],
+					"query": [
+						{
+							"key": "count",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/discovery/data/{{reportId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"discovery",
+						"data",
+						"{{reportId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get data with paging",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/discovery/data/{{reportId}}?page=1&size=5",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"discovery",
+						"data",
+						"{{reportId}}"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d27a9c92-afc7-460a-8de6-de8b5533af49",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "05eadc50-86dd-48b6-bd69-eaa67ab2cd93",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "189ac46a-4f8c-47d9-a188-88f62223c8b1",
+			"key": "baseUrl",
+			"value": "arch.homework",
+			"type": "string"
+		},
+		{
+			"id": "1376edb6-dd60-4891-bec9-2158b9a5beb6",
+			"key": "reportId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

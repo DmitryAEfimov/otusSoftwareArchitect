@@ -1,0 +1,14 @@
+auth:
+  username: rabbitmquser
+  password: passwd
+image:
+  debug: true
+persistence:
+  size: 128Mi
+ingress:
+  enabled: true
+metrics:
+  enabled	: true
+  serviceMonitor:
+    enabled: true
+    namespace: default

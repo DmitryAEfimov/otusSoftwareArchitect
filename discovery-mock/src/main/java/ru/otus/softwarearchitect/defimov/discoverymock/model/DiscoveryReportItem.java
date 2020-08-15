@@ -59,14 +59,17 @@ public class DiscoveryReportItem {
 
 		DiscoveryReportItem that = (DiscoveryReportItem) o;
 
-		if (!id.equals(that.id))
+		if (!reportId.equals(that.reportId))
 			return false;
-		return reportId.equals(that.reportId);
+		if (!networkDomen.equals(that.networkDomen))
+			return false;
+		return ipAddress.equals(that.ipAddress);
 	}
 
 	@Override public int hashCode() {
-		int result = id.hashCode();
-		result = 31 * result + reportId.hashCode();
+		int result = reportId.hashCode();
+		result = 31 * result + networkDomen.hashCode();
+		result = 31 * result + ipAddress.hashCode();
 		return result;
 	}
 }

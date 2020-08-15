@@ -12,6 +12,6 @@ RUN python -m pip install --upgrade pip -r requirements.txt
 
 COPY ./gen-app.py .
 COPY ./generator.py .
-EXPOSE 8000
+EXPOSE ${PORT}
 
 ENTRYPOINT ["python", "/opt/data-generator/gen-app.py"]

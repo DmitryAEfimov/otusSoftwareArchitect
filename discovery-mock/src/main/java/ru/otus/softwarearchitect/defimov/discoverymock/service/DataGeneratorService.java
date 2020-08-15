@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import ru.otus.softwarearchitect.defimov.discoverymock.model.DiscoveryReportItem;
 import ru.otus.softwarearchitect.defimov.discoverymock.model.ReportRepository;
-import ru.otus.softwarearchitect.defimov.discoverymock.model.dto.DiscoveryReportDTO;
+import ru.otus.softwarearchitect.defimov.discoverymock.service.dto.DiscoveryReportDTO;
 
 import java.util.Locale;
 import java.util.Set;
@@ -20,11 +20,11 @@ public class DataGeneratorService {
 	private final ReportRepository reportRepository;
 	private final MessageSource messageSource;
 
-	@Value("${app.stubgenerator.host}")
+	@Value("${app.stubgenerator.host:}")
 	private String host;
-	@Value("${app.stubgenerator.path}")
+	@Value("${app.stubgenerator.path:}")
 	private String path;
-	@Value("${app.stubgenerator.port}")
+	@Value("${app.stubgenerator.port:8080}")
 	private int port;
 
 	public DataGeneratorService(RestTemplate restTemplate, ReportRepository reportRepository,
@@ -34,7 +34,7 @@ public class DataGeneratorService {
 		this.messageSource = messageSource;
 	}
 
-	public void generate(int dataCnt) {
+	public UUID generate(int dataCnt) {
 		String completeUrl = String
 				.format("http://%s:%d/%s?items_cnt=%d", host, port, path, dataCnt);
 		DiscoveryReportDTO dtoObject = restTemplate.getForObject(completeUrl, DiscoveryReportDTO.class);
@@ -45,9 +45,12 @@ public class DataGeneratorService {
 		Set<DiscoveryReportItem> reportItems = dtoObject.getItems().stream().map(item -> toModel(reportId, item))
 				.collect(Collectors.toSet());
 		reportRepository.saveAll(reportItems);
+
+		return reportId;
 	}
 
 	private DiscoveryReportItem toModel(UUID reportId, DiscoveryReportDTO.ItemDTO dto) {
-		return new DiscoveryReportItem(reportId, dto.networkDomen, dto.ipAddress, dto.model, dto.elementStatus);
+		return new DiscoveryReportItem(reportId, dto.getNetworkDomen(), dto.getIpAddress(), dto.getModel(),
+				dto.getElementStatus());
 	}
 }

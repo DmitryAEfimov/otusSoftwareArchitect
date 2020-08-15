@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "discovery-mock.fullname" . }}
+  labels:
+  {{- include "discovery-mock.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+  {{- include "discovery-mock.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+    {{- include "discovery-mock.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "discovery-mock.serviceAccountName" . }}
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: "{{ .Chart.Name }}-init"
+          image: busybox:latest
+          command: ['sh', '-c', "until nslookup -query=ns {{ include "mongodb.fullname" . }}.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for {{ include "mongodb.fullname" . }}; sleep 30; done"]
+      containers:
+        # Sidecar data-generator container
+        - name: "{{ .Chart.Name }}-sidecar"
+          securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.sidecar }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.sidecar.port }}
+              protocol: TCP
+          env:
+            - name: PORT
+              value: {{ .Values.sidecar.port | quote }}
+          livenessProbe:
+            httpGet:
+              path: /faker/health
+              port: {{ .Values.sidecar.port }}
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /faker/health
+              port: {{ .Values.sidecar.port }}
+            periodSeconds: 5
+          resources:
+        {{- toYaml .Values.resources | nindent 12 }}
+        # Service container
+        - name: {{ .Chart.Name }}
+          securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+          env:
+            - name: SPRING_APPLICATION_JSON
+              valueFrom:
+                configMapKeyRef:
+                  name: "{{ include "discovery-mock.fullname" . }}-config"
+                  key: appconfig.json
+          livenessProbe:
+            httpGet:
+              path: /manage/health
+              port: http
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /manage/health
+              port: http
+            periodSeconds: 5
+          resources:
+      {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+  {{- end }}

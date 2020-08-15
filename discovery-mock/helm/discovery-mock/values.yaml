@@ -85,7 +85,6 @@ tolerations: []
 affinity: {}
 
 sidecar:
-  path: faker/data
   port: 18000
 
 mongodb:
@@ -103,7 +102,7 @@ mongodb:
 
 rabbitmq:
   exchangeName: amqp.exch.nw-discovery
-  namespace: appcommon
+  namespace: app-common
   host: rabbitmq
   port: 5672
   auth:

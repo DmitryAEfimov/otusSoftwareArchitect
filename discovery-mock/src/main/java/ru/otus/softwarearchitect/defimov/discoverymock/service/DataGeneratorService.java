@@ -22,8 +22,6 @@ public class DataGeneratorService {
 
 	@Value("${app.stubgenerator.host:}")
 	private String host;
-	@Value("${app.stubgenerator.path:}")
-	private String path;
 	@Value("${app.stubgenerator.port:8080}")
 	private int port;
 
@@ -36,7 +34,7 @@ public class DataGeneratorService {
 
 	public UUID generate(int dataCnt) {
 		String completeUrl = String
-				.format("http://%s:%d/%s?items_cnt=%d", host, port, path, dataCnt);
+				.format("http://%s:%d/faker/data?items_cnt=%d", host, port, dataCnt);
 		DiscoveryReportDTO dtoObject = restTemplate.getForObject(completeUrl, DiscoveryReportDTO.class);
 		UUID reportId = UUID.randomUUID();
 

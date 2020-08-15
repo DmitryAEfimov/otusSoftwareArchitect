@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface ReportRepository extends MongoRepository<DiscoveryReportItem, String> {
 	Page<DiscoveryReportItem> findAllByReportId(UUID reportId, Pageable pageable);
+
 	@Query(value = "{'reportId': ?0}", count = true)
 	int countItemsByReportId(UUID reportId);
 }

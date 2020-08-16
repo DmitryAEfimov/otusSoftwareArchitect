@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import ru.otus.softwarearchitect.defimov.discoverymock.model.DiscoveryReportItem;
 import ru.otus.softwarearchitect.defimov.discoverymock.model.ReportRepository;
-import ru.otus.softwarearchitect.defimov.discoverymock.service.dto.DiscoveryReportDTO;
+import ru.otus.softwarearchitect.defimov.discoverymock.service.dto.DiscoveryReportDto;
 
 import java.util.Locale;
 import java.util.Set;
@@ -35,7 +35,7 @@ public class DataGeneratorService {
 	public UUID generate(int dataCnt) {
 		String completeUrl = String
 				.format("http://%s:%d/faker/data?items_cnt=%d", host, port, dataCnt);
-		DiscoveryReportDTO dtoObject = restTemplate.getForObject(completeUrl, DiscoveryReportDTO.class);
+		DiscoveryReportDto dtoObject = restTemplate.getForObject(completeUrl, DiscoveryReportDto.class);
 		UUID reportId = UUID.randomUUID();
 
 		Assert.notNull(dtoObject,
@@ -47,7 +47,7 @@ public class DataGeneratorService {
 		return reportId;
 	}
 
-	private DiscoveryReportItem toModel(UUID reportId, DiscoveryReportDTO.ItemDTO dto) {
+	private DiscoveryReportItem toModel(UUID reportId, DiscoveryReportDto.ItemDTO dto) {
 		return new DiscoveryReportItem(reportId, dto.getNetworkDomen(), dto.getIpAddress(), dto.getModel(),
 				dto.getElementStatus());
 	}

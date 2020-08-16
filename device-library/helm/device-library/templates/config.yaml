@@ -7,6 +7,11 @@ data:
   dbuser: {{ .Values.postgresql.postgresqlUsername | quote }}
   appconfig.json: |
     {
+      "app": {
+        "service": {
+          "identity": {{ .Values.service.serviceName | quote }}
+        }
+      },
       "spring": {
         "datasource": {
           "url": {{ printf "jdbc:postgresql://%s:%s/%s" (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase | quote }},

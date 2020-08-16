@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -18,12 +17,9 @@ import java.util.List;
 @Configuration
 public class RestTemplateConfig {
 	@Bean
-	public RestTemplate restTemplate(ClientHttpRequestInterceptor loggingRequestInterceptor) {
+	public RestTemplate restTemplate() {
 		RestTemplate restTemplate = new RestTemplate(
 				new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
-
-		final List<ClientHttpRequestInterceptor> interceptors = Collections.singletonList(loggingRequestInterceptor);
-		restTemplate.setInterceptors(interceptors);
 
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
 		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();

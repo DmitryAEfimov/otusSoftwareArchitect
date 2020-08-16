@@ -6,6 +6,9 @@ data:
   appconfig.json: |
     {
       "app": {
+        "service": {
+          "identity": {{ .Values.service.serviceName | quote }}
+        },
         "stubgenerator": {
           "host": "0.0.0.0",
           "port": {{ .Values.sidecar.port | quote }}

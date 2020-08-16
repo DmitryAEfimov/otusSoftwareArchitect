@@ -118,13 +118,13 @@
 	],
 	"variable": [
 		{
-			"id": "189ac46a-4f8c-47d9-a188-88f62223c8b1",
+			"id": "31c5313e-b629-4477-afe8-44e28503b7a1",
 			"key": "baseUrl",
 			"value": "arch.homework",
 			"type": "string"
 		},
 		{
-			"id": "1376edb6-dd60-4891-bec9-2158b9a5beb6",
+			"id": "18314128-fad9-4e7c-85bb-4f60ab1cb8f2",
 			"key": "reportId",
 			"value": "",
 			"type": "string"

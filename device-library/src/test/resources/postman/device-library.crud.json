@@ -156,6 +156,50 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "handle unknown",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8b68f6f6-2f91-4dd3-8fc5-e60079306b5c",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/device_library/devices/unknown",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"device_library",
+						"devices",
+						"unknown"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -182,25 +226,25 @@
 	],
 	"variable": [
 		{
-			"id": "c3445f1b-4f9c-46e8-ac83-81be3b76f201",
+			"id": "c6bb0dd1-980f-4992-afa5-7e7156f7cd70",
 			"key": "baseUrl",
 			"value": "arch.homework",
 			"type": "string"
 		},
 		{
-			"id": "aceb0c45-67e7-4904-be7d-c63edca9912c",
+			"id": "1e793ced-c98b-4655-ba31-47d6b800cf84",
 			"key": "deviceId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "c2c4883d-8dde-4b68-9f5b-9277a1c74799",
+			"id": "73fca87d-4665-4e09-a963-367beb8bd14e",
 			"key": "ciscoDeviceId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "20a2836a-327f-4fb8-903f-a187c18101dd",
+			"id": "d1ac18ac-aa30-439d-8afc-d58b1c56ee2d",
 			"key": "huaweiDeviceId",
 			"value": "",
 			"type": "string"

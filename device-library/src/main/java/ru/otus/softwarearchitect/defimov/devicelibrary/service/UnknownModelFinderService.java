@@ -85,7 +85,6 @@ public class UnknownModelFinderService {
 		Set<String> models = new HashSet<>();
 		while (true) {
 			String completeUrl = String
-					//					.format("http://%s:%d/discovery/data/%s?page=%d&size=%d", discoveryServiceHost,
 					.format("http://%s:%d/data/%s?page=%d&size=%d", discoveryServiceHost,
 							discoveryServicePort, reportId, pageNum++, chunkSize);
 			ReportItemChunkDto chunk = restTemplate.getForObject(completeUrl, ReportItemChunkDto.class);

@@ -8,6 +8,10 @@ data:
   appconfig.json: |
     {
       "app": {
+        "discoveryservice": {
+          "host": {{ printf "%s.%s.svc.cluster.local" .Values.discoveryservice.host .Values.discoveryservice.namespace | quote }},
+          "port": {{ .Values.discoveryservice.port | quote }}
+        },
         "service": {
           "identity": {{ .Values.service.serviceName | quote }}
         }

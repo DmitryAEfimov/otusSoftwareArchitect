@@ -151,3 +151,7 @@ rabbitmq:
   auth:
     username: rabbitmquser
     password: passwd
+discoveryservice:
+  namespace: discovery-service
+  host: discovery-discovery-mock
+  port: 80

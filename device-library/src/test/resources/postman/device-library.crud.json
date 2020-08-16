@@ -117,49 +117,6 @@
 			"response": []
 		},
 		{
-			"name": "get all devices",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "8acd114f-832c-467c-8e32-b522cb906c57",
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://{{baseUrl}}/device_library/devices",
-					"protocol": "http",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"device_library",
-						"devices"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "delete cisco switch",
 			"event": [
 				{
@@ -225,25 +182,25 @@
 	],
 	"variable": [
 		{
-			"id": "b009c3e2-0d8c-49d1-a728-bc2879cbc8e2",
+			"id": "c3445f1b-4f9c-46e8-ac83-81be3b76f201",
 			"key": "baseUrl",
 			"value": "arch.homework",
 			"type": "string"
 		},
 		{
-			"id": "6ea5376b-d552-4b3c-82f9-5840209db0ca",
+			"id": "aceb0c45-67e7-4904-be7d-c63edca9912c",
 			"key": "deviceId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "ad96206a-e222-42da-995f-205164cb2fe5",
+			"id": "c2c4883d-8dde-4b68-9f5b-9277a1c74799",
 			"key": "ciscoDeviceId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "5ddce68e-3545-4512-9042-75075f17ee43",
+			"id": "20a2836a-327f-4fb8-903f-a187c18101dd",
 			"key": "huaweiDeviceId",
 			"value": "",
 			"type": "string"

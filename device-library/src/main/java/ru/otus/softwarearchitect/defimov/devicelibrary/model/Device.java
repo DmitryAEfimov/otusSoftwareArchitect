@@ -24,7 +24,7 @@ import java.util.UUID;
 		typeClass = PostgreSQLEnumType.class
 )
 @Access(AccessType.FIELD)
-@NamedQuery(name = "findAll", query = "from Device")
+@NamedQuery(name = "Device.findAll", query = "from Device")
 public class Device {
 	private UUID uuid;
 

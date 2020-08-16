@@ -1,5 +1,7 @@
 package ru.otus.softwarearchitect.defimov.devicelibrary;
 
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
@@ -26,5 +28,4 @@ public class DeviceLibraryApplication {
 
 		return messageSource;
 	}
-
 }

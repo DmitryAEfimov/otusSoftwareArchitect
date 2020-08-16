@@ -101,7 +101,6 @@ mongodb:
     enabled: true
 
 rabbitmq:
-  exchangeName: amqp.exch.nw-discovery
   namespace: app-common
   host: rabbitmq
   port: 5672

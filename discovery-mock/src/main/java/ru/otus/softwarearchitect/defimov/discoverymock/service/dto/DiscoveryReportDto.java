@@ -7,7 +7,7 @@ import ru.otus.softwarearchitect.defimov.discoverymock.model.ElementStatus;
 import java.io.Serializable;
 import java.util.List;
 
-public class DiscoveryReportDTO implements Serializable {
+public class DiscoveryReportDto implements Serializable {
 	@JsonUnwrapped
 	@JsonProperty(value = "items")
 	private List<ItemDTO> items;

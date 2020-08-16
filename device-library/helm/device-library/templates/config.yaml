@@ -12,6 +12,12 @@ data:
           "url": {{ printf "jdbc:postgresql://%s:%s/%s" (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase | quote }},
           "username": {{ .Values.postgresql.postgresqlUsername | quote }},
           "password": {{ .Values.postgresql.postgresqlPassword | quote }}
+        },
+        "rabbitmq": {
+          "host": {{ printf "%s.%s.svc.cluster.local" .Values.rabbitmq.host .Values.rabbitmq.namespace | quote }},
+          "port": {{ .Values.rabbitmq.port | quote }},
+          "username": {{ .Values.rabbitmq.auth.username | quote }},
+          "password": {{ .Values.rabbitmq.auth.password | quote }}
         }
       },
       "server": {

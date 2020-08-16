@@ -81,7 +81,7 @@ postgresql:
     enabled: true
     serviceMonitor:
       enabled: true
-      namespace: devicelibrary
+      namespace: device-library
       interval: 30s
       scrapeTimeout: 10s
     customMetrics:
@@ -143,3 +143,11 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+rabbitmq:
+  namespace: app-common
+  host: rabbitmq
+  port: 5672
+  auth:
+    username: rabbitmquser
+    password: passwd

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface DeviceRepository extends CrudRepository<Device, UUID>, UnknownDeviceRepository {
+public interface DeviceRepository extends CrudRepository<Device, UUID> {
 }

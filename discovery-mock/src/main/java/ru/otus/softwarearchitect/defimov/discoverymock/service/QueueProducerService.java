@@ -6,13 +6,17 @@ import ru.otus.softwarearchitect.defimov.discoverymock.service.dto.NotificationM
 
 @Component
 public class QueueProducerService {
-	private RabbitTemplate rabbitTemplate;
+	private final RabbitTemplate rabbitTemplate;
 
 	public QueueProducerService(RabbitTemplate rabbitTemplate) {
 		this.rabbitTemplate = rabbitTemplate;
+		rabbitTemplate.addBeforePublishPostProcessors(message -> {
+
+			return message;
+		});
 	}
 
-	public void fireInitializationComplete(NotificationMessage message) {
-		rabbitTemplate.convertAndSend(message);
+	public void fireInitializationComplete(NotificationMessage notificationMessage) {
+		rabbitTemplate.convertAndSend(notificationMessage);
 	}
 }

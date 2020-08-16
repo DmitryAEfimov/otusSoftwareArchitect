@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.discoverymock.service.config;
+package ru.otus.softwarearchitect.defimov.devicelibrary.service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

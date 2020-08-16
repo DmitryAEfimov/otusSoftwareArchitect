@@ -4,7 +4,7 @@ auth:
 image:
   debug: true
 persistence:
-  size: 128Mi
+  size: 256Mi
 ingress:
   enabled: true
 metrics:

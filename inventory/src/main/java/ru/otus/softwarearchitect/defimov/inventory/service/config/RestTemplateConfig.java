@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.devicelibrary.service.config;
+package ru.otus.softwarearchitect.defimov.inventory.service.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;

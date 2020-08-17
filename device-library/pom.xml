@@ -45,6 +45,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -101,5 +102,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

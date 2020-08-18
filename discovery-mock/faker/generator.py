@@ -11,7 +11,6 @@ models = ['Cisco MC1000-PX', 'Huawei MA5800C-X16',
           'Zyxel GS-108BV3-EU0101F', 'Juniper T4000-12XGE-FPC5-UPG', 'Juniper ACX2000-DC', 'Cisco AIR-CT8510-1K-K9',
           'Cisco WS-C3850-48T-L']
 
-
 class FakeData():
     def generate(self, items_cnt):
         cnt = int(items_cnt)

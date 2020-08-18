@@ -1,5 +1,9 @@
 package ru.otus.softwarearchitect.defimov.inventory.model.reconciliation.model;
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -13,8 +17,12 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "RECONSILIATION_ERROR")
+@Table(name = "RECONCILIATION_ERRORS")
 @Access(AccessType.FIELD)
+@TypeDef(
+		name = "pgsql_enum",
+		typeClass = PostgreSQLEnumType.class
+)
 public class ReconciliationError {
 	private UUID id;
 
@@ -34,6 +42,7 @@ public class ReconciliationError {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "ERROR_TYPE")
+	@Type(type = "pgsql_enum")
 	private ReconciliationErrorType errorType;
 
 	@Column(name = "OBJECT_IDENTITY")

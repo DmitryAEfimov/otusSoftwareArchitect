@@ -10,10 +10,6 @@ public class QueueProducerService {
 
 	public QueueProducerService(RabbitTemplate rabbitTemplate) {
 		this.rabbitTemplate = rabbitTemplate;
-		rabbitTemplate.addBeforePublishPostProcessors(message -> {
-
-			return message;
-		});
 	}
 
 	public void fireInitializationComplete(NotificationMessage notificationMessage) {

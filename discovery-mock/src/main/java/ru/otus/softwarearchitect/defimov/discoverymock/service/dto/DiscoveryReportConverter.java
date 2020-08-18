@@ -34,7 +34,10 @@ public class DiscoveryReportConverter implements MessageConverter {
 		messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
 		messageProperties.setCorrelationId(UUID.randomUUID().toString());
 		messageProperties.setContentLength(body.length);
-		messageProperties.getHeaders().put("serviceName", serviceIdentity);
+
+		String servcieChain = (String) messageProperties.getHeaders().get("serviceChain");
+		servcieChain = servcieChain != null ? servcieChain + "," + serviceIdentity : serviceIdentity;
+		messageProperties.getHeaders().put("serviceChain", servcieChain);
 
 		return MessageBuilder.withBody(body).andProperties(messageProperties)
 				.build();

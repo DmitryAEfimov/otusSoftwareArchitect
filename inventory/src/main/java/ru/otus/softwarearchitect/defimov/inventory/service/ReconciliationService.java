@@ -5,16 +5,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import ru.otus.softwarearchitect.defimov.inventory.model.ne.DeviceDescriptor;
 import ru.otus.softwarearchitect.defimov.inventory.model.ne.NetworkElement;
 import ru.otus.softwarearchitect.defimov.inventory.model.ne.NetworkElementRepository;
 import ru.otus.softwarearchitect.defimov.inventory.model.ne.NetworkStatus;
 import ru.otus.softwarearchitect.defimov.inventory.model.reconciliation.ReconciliationRepository;
 import ru.otus.softwarearchitect.defimov.inventory.model.reconciliation.model.ReconciliationTask;
-import ru.otus.softwarearchitect.defimov.inventory.model.reconciliation.model.TaskStatus;
 import ru.otus.softwarearchitect.defimov.inventory.service.dto.ReportItemChunkDto;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -22,8 +23,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class ReconciliationService {
-	private static final String EXECUTION_ERROR_SUMMARY = "Execution error: ";
-
 	@Value(value = "${app.ext-service.discovery.host}")
 	private String discoveryServiceHost;
 
@@ -44,37 +43,35 @@ public class ReconciliationService {
 	}
 
 	public void start(UUID discoveryReportId, @Nullable Integer chunkSize) {
-		ReconciliationTask task = reconsiliationRepository.initTask();
+		ReconciliationTask task = reconsiliationRepository.initTask(discoveryReportId);
 
 		try {
-			CompletableFuture.runAsync(() -> doTask(task, discoveryReportId, chunkSize != null ? chunkSize : 100));
+			CompletableFuture.runAsync(() -> doTask(task, chunkSize != null ? chunkSize : 100));
 		} catch (Exception ex) {
-			task.setTaskStatus(TaskStatus.Error);
-			task.setStatusDetailInfo(EXECUTION_ERROR_SUMMARY + ex.getMessage());
+			reconsiliationRepository.finishTask(task, ex);
 		}
+	}
+
+	private void doTask(ReconciliationTask task, int chunkSize) {
+		reconsiliationRepository.startTask(task);
+
+		Set<NetworkElement> processedNe = processDiscovered(task, chunkSize);
+		processOrphan(task, processedNe);
 
 		reconsiliationRepository.finishTask(task);
 	}
 
-	private void doTask(ReconciliationTask task, UUID discoveryReportId, int chunkSize) {
-		reconsiliationRepository.startTask(task);
-
-		Set<NetworkElement> processedNe = processDiscovered(task.getId(), discoveryReportId, chunkSize);
-		processOrphan(task.getId(), processedNe);
-
-		task.setTaskStatus(TaskStatus.Finished);
-	}
-
-	public Set<NetworkElement> processDiscovered(UUID taskId, UUID discoveryReportId, int chunkSize) {
+	public Set<NetworkElement> processDiscovered(ReconciliationTask task, int chunkSize) {
 		int pageNum = 0;
 		Set<NetworkElement> processedNe = new HashSet<>();
 		while (true) {
 			String completeUrl = String
-					.format("http://%s:%d/data/%s?page=%d&size=%d", discoveryServiceHost,
-							discoveryServicePort, discoveryReportId, pageNum++, chunkSize);
+					.format("http://%s:%d/discovery/data/%s?page=%d&size=%d", discoveryServiceHost,
+							discoveryServicePort, task.getDiscoveryReportId(), pageNum++, chunkSize);
 			ReportItemChunkDto chunk = restTemplate.getForObject(completeUrl, ReportItemChunkDto.class);
 			if (chunk != null) {
-				chunk.getContent().stream().map(item -> enrichNetworkElement(taskId, item)).filter(Objects::nonNull)
+				chunk.getContent().stream().map(item -> enrichNetworkElement(task.getId(), item))
+						.filter(Objects::nonNull)
 						.forEach(processedNe::add);
 
 				if (chunk.isLast())
@@ -86,7 +83,7 @@ public class ReconciliationService {
 		return processedNe;
 	}
 
-	public void processOrphan(UUID taskId, Set<NetworkElement> processedNe) {
+	public void processOrphan(ReconciliationTask task, Set<NetworkElement> processedNe) {
 		Set<NetworkElement> orphanNe = Streams.stream(neRepository.findAll()).filter(ne -> !processedNe.contains(ne))
 				.peek(ne -> {
 					NetworkStatus currentStatus = ne.getNetworkStatus();
@@ -99,7 +96,7 @@ public class ReconciliationService {
 					}
 				}).collect(Collectors.toSet());
 		neRepository.saveAll(orphanNe);
-		reconsiliationRepository.saveNetworkUnavailable(taskId, orphanNe);
+		reconsiliationRepository.saveNetworkUnavailable(task.getId(), orphanNe);
 	}
 
 	private NetworkElement enrichNetworkElement(UUID taskId, ReportItemChunkDto.Item item) {
@@ -110,19 +107,16 @@ public class ReconciliationService {
 							reconsiliationRepository
 									.saveNotFoundInInventory(taskId, item.getSnmpAgentName(), item.getIp());
 						});
-		libraryService.findDeviceDescriptor(item.getDeviceModel())
-				.ifPresentOrElse(
-						descriptor -> {
-							if (ne[0] != null) {
-								ne[0].setDeviceDescriptor(descriptor);
-							}
-						},
-						() -> {
-							ne[0].setDeviceDescriptor(null);
-							reconsiliationRepository.saveUnknownModel(taskId, item.getDeviceModel());
-						});
+
+		Optional<DeviceDescriptor> deviceDescriptor = libraryService.findDeviceDescriptor(item.getDeviceModel());
+
+		if (deviceDescriptor.isEmpty()) {
+			reconsiliationRepository.saveUnknownModel(taskId, item.getDeviceModel());
+		}
 
 		if (ne[0] != null) {
+			ne[0].setDeviceDescriptor(deviceDescriptor.orElse(null));
+
 			NetworkStatus newStatus = item.getElementStatus();
 			switch (ne[0].getNetworkStatus()) {
 			case Undefined:

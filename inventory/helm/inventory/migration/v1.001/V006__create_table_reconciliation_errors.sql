@@ -6,5 +6,5 @@ CREATE TABLE reconciliation_errors
     task_id         uuid                   NOT NULL,
     object_identity VARCHAR(128),
     error_type      t_reconciliation_error NOT NULL,
-    CONSTRAINT fk_rec_err_task FOREIGN KEY (task_id) REFERENCES reconciliation_task (id)
+    CONSTRAINT fk_rec_err_task FOREIGN KEY (task_id) REFERENCES reconciliation_tasks (id)
 );

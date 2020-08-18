@@ -23,7 +23,7 @@ public class DeviceLibraryService {
 
 	public Optional<DeviceDescriptor> findDeviceDescriptor(String deviceModelName) {
 		String completeUrl = String
-				.format("http://%s:%d/devices/descriptor?vendor=%s&mp&model=%s", libraryServiceHostname,
+				.format("http://%s:%d/device_library/specs?vendor=%s&model=%s", libraryServiceHostname,
 						libraryServicePort,
 						DeviceDescriptor.extractVendor(deviceModelName),
 						DeviceDescriptor.extractModel(deviceModelName));

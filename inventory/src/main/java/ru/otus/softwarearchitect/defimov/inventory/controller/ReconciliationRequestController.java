@@ -33,7 +33,7 @@ public class ReconciliationRequestController {
 	}
 
 	@PostMapping(value = "reconciliation/retry", produces = MediaType.APPLICATION_JSON_VALUE)
-	public void retry() throws ConcurrentReconciliationTaskException {
+	public void retry() {
 		Optional<ReconciliationTask> task = reconciliationRepository.findLastTask();
 
 		if (task.isEmpty()) {
@@ -42,7 +42,7 @@ public class ReconciliationRequestController {
 			throw new ConcurrentReconciliationTaskException();
 		}
 
-		reconciliationService.start(task.get().getId(), null);
+		reconciliationService.start(task.get().getDiscoveryReportId(), null);
 	}
 
 	@GetMapping(value = "reconciliation/result", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +50,7 @@ public class ReconciliationRequestController {
 		Optional<ReconciliationTask> task = reconciliationRepository.findLastFinished();
 
 		if (task.isPresent()) {
-			return reconciliationRepository.getResults(task.get()).sorted(
+			return reconciliationRepository.getResults(task.get()).stream().sorted(
 					Comparator.comparing(ReconciliationError::getErrorType)
 							.thenComparing(ReconciliationError::getObjectIdentity)).collect(
 					Collectors.toList());

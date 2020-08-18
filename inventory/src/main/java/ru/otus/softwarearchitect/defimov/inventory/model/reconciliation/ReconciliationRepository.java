@@ -7,7 +7,6 @@ import ru.otus.softwarearchitect.defimov.inventory.model.reconciliation.model.Re
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 public interface ReconciliationRepository {
 	void saveNotFoundInInventory(UUID taskId, String snmpAgentName, String ipAddress);
@@ -16,15 +15,17 @@ public interface ReconciliationRepository {
 
 	void saveNetworkUnavailable(UUID taskId, Set<NetworkElement> orhans);
 
-	ReconciliationTask initTask();
+	ReconciliationTask initTask(UUID discoveryReportId);
 
 	void startTask(ReconciliationTask task);
 
 	void finishTask(ReconciliationTask task);
 
+	void finishTask(ReconciliationTask task, Exception ex);
+
 	Optional<ReconciliationTask> findLastTask();
 
 	Optional<ReconciliationTask> findLastFinished();
 
-	Stream<ReconciliationError> getResults(ReconciliationTask task);
+	Set<ReconciliationError> getResults(ReconciliationTask task);
 }

@@ -1,5 +1,8 @@
 package ru.otus.softwarearchitect.defimov.inventory.model.ne;
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import ru.otus.softwarearchitect.defimov.inventory.model.location.Location;
 
 import javax.persistence.Access;
@@ -25,8 +28,17 @@ import java.util.UUID;
 @Entity
 @Table(name = "NETWORK_ELEMENTS")
 @Access(AccessType.FIELD)
+@TypeDef(
+		name = "pgsql_enum",
+		typeClass = PostgreSQLEnumType.class
+)
 public class NetworkElement {
 	private UUID id;
+
+	protected NetworkElement() {
+		//	JPA only
+		this.networkStatus = NetworkStatus.Undefined;
+	}
 
 	@Column(name = "SNMP_AGENT", nullable = false)
 	private String snmpAgentName;
@@ -39,8 +51,9 @@ public class NetworkElement {
 	@JoinColumn(name = "LOCATION", nullable = false)
 	private Location location;
 
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	@Column(name = "NETWORK_STATUS")
+	@Type(type = "pgsql_enum")
 	private NetworkStatus networkStatus;
 
 	@ManyToOne
@@ -89,5 +102,24 @@ public class NetworkElement {
 
 	public void setDeviceDescriptor(DeviceDescriptor device) {
 		this.deviceDescriptor = device;
+	}
+
+	@Override public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		NetworkElement that = (NetworkElement) o;
+
+		if (!snmpAgentName.equals(that.snmpAgentName))
+			return false;
+		return ip.equals(that.ip);
+	}
+
+	@Override public int hashCode() {
+		int result = snmpAgentName.hashCode();
+		result = 31 * result + ip.hashCode();
+		return result;
 	}
 }

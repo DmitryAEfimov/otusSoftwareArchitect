@@ -40,19 +40,19 @@ public class Specification {
 	private DeviceClass deviceClass;
 
 	@Column(name = "ETH_PORT_CNT")
-	private Integer ethPortCnt;
+	private int ethPortCnt;
 
 	@Column(name = "ETH_PORT_TYPE")
 	private String ethPortType;
 
 	@Column(name = "OPTICAL_PORT_CNT")
-	private Integer opticalPortCnt;
+	private int opticalPortCnt;
 
 	@Column(name = "OPTICAL_PORT_TYPE")
 	private String opticalPortType;
 
 	@Column(name = "SLOT_CNT")
-	private Integer slotCnt;
+	private int slotCnt;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

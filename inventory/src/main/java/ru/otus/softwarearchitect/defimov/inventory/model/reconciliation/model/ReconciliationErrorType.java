@@ -13,6 +13,7 @@ public enum ReconciliationErrorType {
 
 	ReconciliationErrorType(String errorDescription, String troubleshootAdvise) {
 		this.errorDescription = errorDescription;
+		this.troubleshootAdvise = troubleshootAdvise;
 	}
 
 	public String getErrorDescription() {

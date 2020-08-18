@@ -21,6 +21,8 @@ import java.util.stream.Stream;
 
 @Repository
 public class ReconciliationRepositoryImpl implements ReconciliationRepository {
+	private static final String EXECUTION_ERROR_SUMMARY = "Execution error: ";
+
 	private ReconciliationTaskRepository taskRepository;
 	private ReconciliationErrorRepository errorRepository;
 
@@ -52,12 +54,11 @@ public class ReconciliationRepositoryImpl implements ReconciliationRepository {
 			return new ReconciliationError(taskId, errorType, buildNeIdentity(orhan.getSnmpAgentName(), orhan.getIp()));
 		}).collect(Collectors.toSet());
 		errorRepository.saveAll(errors);
-
 	}
 
 	@Override
-	public ReconciliationTask initTask() {
-		ReconciliationTask task = new ReconciliationTask(getCurrent(), TaskStatus.Pending);
+	public ReconciliationTask initTask(UUID discoveryReportId) {
+		ReconciliationTask task = new ReconciliationTask(discoveryReportId, getCurrent(), TaskStatus.Pending);
 		return taskRepository.save(task);
 	}
 
@@ -67,6 +68,14 @@ public class ReconciliationRepositoryImpl implements ReconciliationRepository {
 	}
 
 	@Override public void finishTask(ReconciliationTask task) {
+		task.setTaskStatus(TaskStatus.Finished);
+		task.setEndDate(getCurrent());
+		taskRepository.save(task);
+	}
+
+	@Override public void finishTask(ReconciliationTask task, Exception ex) {
+		task.setTaskStatus(TaskStatus.Error);
+		task.setStatusDetailInfo(EXECUTION_ERROR_SUMMARY + ex.getMessage());
 		task.setEndDate(getCurrent());
 		taskRepository.save(task);
 	}
@@ -80,7 +89,7 @@ public class ReconciliationRepositoryImpl implements ReconciliationRepository {
 		return taskRepository.findTopByTaskStatusIsOrderByEndDateDesc(TaskStatus.Finished);
 	}
 
-	@Override public Stream<ReconciliationError> getResults(ReconciliationTask task) {
+	@Override public Set<ReconciliationError> getResults(ReconciliationTask task) {
 		return errorRepository.findByTaskId(task.getId());
 	}
 

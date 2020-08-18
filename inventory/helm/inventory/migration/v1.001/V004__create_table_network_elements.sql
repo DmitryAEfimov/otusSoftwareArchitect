@@ -1,4 +1,4 @@
-CREATE TYPE t_network_statuses AS ENUM ('Undefined', 'Active', 'OnHold', 'Unavailable');
+CREATE TYPE t_network_statuses AS ENUM ('Undefined', 'Active', 'OnHold', 'PreUnavailable', 'Unavailable');
 
 CREATE TABLE network_elements
 (

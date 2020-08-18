@@ -1,6 +1,5 @@
 package ru.otus.softwarearchitect.defimov.inventory.model.ne;
 
-import org.hibernate.annotations.TypeDef;
 import ru.otus.softwarearchitect.defimov.inventory.model.location.Location;
 
 import javax.persistence.Access;
@@ -8,6 +7,8 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "NETWORK_ELEMENTS")
 @Access(AccessType.FIELD)
-@TypeDef(name = "ne_id", typeClass = UUID.class)
 public class NetworkElement {
 	private UUID id;
 
@@ -36,8 +36,16 @@ public class NetworkElement {
 	private String ip;
 
 	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "LOCATION")
+	@JoinColumn(name = "LOCATION", nullable = false)
 	private Location location;
+
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name = "NETWORK_STATUS")
+	private NetworkStatus networkStatus;
+
+	@ManyToOne
+	@JoinColumn(name = "DEVICE_DESCRIPTOR_ID")
+	private DeviceDescriptor deviceDescriptor;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,7 +55,7 @@ public class NetworkElement {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	protected void setId(UUID id) {
 		this.id = id;
 	}
 
@@ -65,5 +73,21 @@ public class NetworkElement {
 
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+
+	public NetworkStatus getNetworkStatus() {
+		return networkStatus;
+	}
+
+	public void setNetworkStatus(NetworkStatus status) {
+		this.networkStatus = status;
+	}
+
+	public DeviceDescriptor getDeviceDescriptor() {
+		return deviceDescriptor;
+	}
+
+	public void setDeviceDescriptor(DeviceDescriptor device) {
+		this.deviceDescriptor = device;
 	}
 }

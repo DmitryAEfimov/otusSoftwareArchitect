@@ -2,7 +2,7 @@ from faker import Faker
 
 fake = Faker()
 domens = ['spb', 'msk', 'nnov']
-statuses = ['Active', 'On-hold', 'Unavailable']
+statuses = ['Active', 'OnHold', 'Unavailable']
 models = ['Cisco MC1000-PX', 'Huawei MA5800C-X16',
           'TP-Link MC220L', 'D-link DMC-F02SC', '3C-Link 3C-WDM-100-35 (53)-20',
           'Osnovo OMC-100-21S5a', 'ROBOFIBER LFC-1002-SFP', 'EFB-ELEKTRONIK CM-022A', 'SNR SNR-CVT-1000SFP-I',

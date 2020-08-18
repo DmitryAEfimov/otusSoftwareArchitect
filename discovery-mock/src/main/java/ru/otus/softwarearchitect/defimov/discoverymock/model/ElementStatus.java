@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public enum ElementStatus {
 	@JsonProperty("Active")
 	ACTIVE,
-	@JsonProperty("On-hold")
+	@JsonProperty("OnHold")
 	ON_HOLD,
 	@JsonProperty("Unavailable")
 	UNAVAILABLE

@@ -7,11 +7,32 @@ data:
   dbuser: {{ .Values.postgresql.postgresqlUsername | quote }}
   appconfig.json: |
     {
+      "app": {
+        "ext-service": {
+          "discovery": {
+            "host": {{ printf "%s.%s.svc.cluster.local" .Values.externalservices.discovery.host .Values.externalservices.discovery.namespace | quote }},
+            "port": {{ .Values.externalservices.discovery.port | quote }}
+          },
+          "dev-lib": {
+            "host": {{ printf "%s.%s.svc.cluster.local" .Values.externalservices.library.host .Values.externalservices.library.namespace | quote }},
+            "port": {{ .Values.externalservices.library.port | quote }}
+          }
+        },
+        "service": {
+          "identity": {{ .Values.service.serviceName | quote }}
+        }
+      },
       "spring": {
         "datasource": {
           "url": {{ printf "jdbc:postgresql://%s:%s/%s" (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase | quote }},
           "username": {{ .Values.postgresql.postgresqlUsername | quote }},
           "password": {{ .Values.postgresql.postgresqlPassword | quote }}
+        },
+        "rabbitmq": {
+          "host": {{ printf "%s.%s.svc.cluster.local" .Values.rabbitmq.host .Values.rabbitmq.namespace | quote }},
+          "port": {{ .Values.rabbitmq.port | quote }},
+          "username": {{ .Values.rabbitmq.auth.username | quote }},
+          "password": {{ .Values.rabbitmq.auth.password | quote }}
         }
       },
       "server": {

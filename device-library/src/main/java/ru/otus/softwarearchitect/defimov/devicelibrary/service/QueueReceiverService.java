@@ -8,16 +8,16 @@ import ru.otus.softwarearchitect.defimov.devicelibrary.service.dto.DiscoveryRepo
 
 @Component
 public class QueueReceiverService {
-	private final UnknownModelFinderService unknownModelFinder;
+	private final CacheService cacheService;
 	private final DiscoveryReportConverter converter;
 
-	public QueueReceiverService(UnknownModelFinderService unknownModelFinder, DiscoveryReportConverter converter) {
-		this.unknownModelFinder = unknownModelFinder;
+	public QueueReceiverService(CacheService cacheService, DiscoveryReportConverter converter) {
+		this.cacheService = cacheService;
 		this.converter = converter;
 	}
 
 	public void receiveMessage(byte[] content) {
 		Message message = MessageBuilder.withBody(content).build();
-		unknownModelFinder.updateCache((DiscoveryReportDto) converter.fromMessage(message));
+		cacheService.updateCache((DiscoveryReportDto) converter.fromMessage(message));
 	}
 }

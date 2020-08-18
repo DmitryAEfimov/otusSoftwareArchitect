@@ -1,7 +1,5 @@
 package ru.otus.softwarearchitect.defimov.inventory.model.location;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -43,7 +41,7 @@ public class Location {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	protected void setId(UUID id) {
 		this.id = id;
 	}
 

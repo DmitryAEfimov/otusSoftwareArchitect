@@ -1,1 +1,0 @@
-CREATE TYPE t_device_type_enum AS ENUM ('Switch', 'Router', 'MediaConverter', 'MSAN');

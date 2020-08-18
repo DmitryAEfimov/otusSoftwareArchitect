@@ -41,7 +41,7 @@ service:
   containerPort: "8000"
   serviceName: device-library-app-service
   database:
-    version: "003"
+    version: "001"
 
 ingress:
   enabled: true

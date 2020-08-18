@@ -66,11 +66,11 @@ public class ReconciliationService {
 		Set<NetworkElement> processedNe = new HashSet<>();
 		while (true) {
 			String completeUrl = String
-					.format("http://%s:%d/discovery/data/%s?page=%d&size=%d", discoveryServiceHost,
+					.format("http://%s:%d/data/%s?page=%d&size=%d", discoveryServiceHost,
 							discoveryServicePort, task.getDiscoveryReportId(), pageNum++, chunkSize);
 			ReportItemChunkDto chunk = restTemplate.getForObject(completeUrl, ReportItemChunkDto.class);
 			if (chunk != null) {
-				chunk.getContent().stream().map(item -> enrichNetworkElement(task.getId(), item))
+				chunk.getContent().stream().map(item -> enrichNetworkElement(task, item))
 						.filter(Objects::nonNull)
 						.forEach(processedNe::add);
 
@@ -99,19 +99,19 @@ public class ReconciliationService {
 		reconsiliationRepository.saveNetworkUnavailable(task.getId(), orphanNe);
 	}
 
-	private NetworkElement enrichNetworkElement(UUID taskId, ReportItemChunkDto.Item item) {
+	private NetworkElement enrichNetworkElement(ReconciliationTask task, ReportItemChunkDto.Item item) {
 		NetworkElement[] ne = new NetworkElement[1];
 		neRepository.findBySnmpAgentNameAndIp(item.getSnmpAgentName(), item.getIp())
 				.ifPresentOrElse(fromDb -> ne[0] = fromDb,
 						() -> {
 							reconsiliationRepository
-									.saveNotFoundInInventory(taskId, item.getSnmpAgentName(), item.getIp());
+									.saveNotFoundInInventory(task.getId(), item.getSnmpAgentName(), item.getIp());
 						});
 
 		Optional<DeviceDescriptor> deviceDescriptor = libraryService.findDeviceDescriptor(item.getDeviceModel());
 
 		if (deviceDescriptor.isEmpty()) {
-			reconsiliationRepository.saveUnknownModel(taskId, item.getDeviceModel());
+			reconsiliationRepository.saveUnknownModel(task.getId(), item.getDeviceModel());
 		}
 
 		if (ne[0] != null) {

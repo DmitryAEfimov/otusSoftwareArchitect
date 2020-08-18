@@ -39,7 +39,7 @@ public class RabbitConfig {
 
 	@Bean
 	public Queue networkDiscoveryQueue(@Value("${app.rabbit.discovery.queue}") String queueName) {
-		return QueueBuilder.durable(queueName).lazy().build();
+		return QueueBuilder.durable(queueName).lazy().autoDelete().build();
 	}
 
 	@Bean

@@ -39,7 +39,7 @@ service:
   containerPort: "8000"
   serviceName: app-service
   database:
-    version: "001"
+    version: "005"
 
 ingress:
   enabled: true

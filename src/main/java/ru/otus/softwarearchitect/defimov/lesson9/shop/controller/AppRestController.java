@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@Timed(value = "app_request",
+@Timed(value = "auth_request",
 		histogram = true)
 public class AppRestController {
 	private final UserRepository userRepository;
@@ -33,7 +33,7 @@ public class AppRestController {
 		this.messageSource = messageSource;
 	}
 
-	@PostMapping(value = "users", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "register", produces = MediaType.APPLICATION_JSON_VALUE)
 	public User createUser(@RequestBody User user) {
 		if (Objects.nonNull(user.getId())) {
 			throw new UserChangeException(messageSource.getMessage("userIdAlreadyExists", null, Locale.US));
@@ -46,7 +46,7 @@ public class AppRestController {
 		}
 	}
 
-	@PutMapping(value = "users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "profile/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public User updateUser(@PathVariable(name = "id") int id, @RequestBody User user) {
 		User entityUser = findById(id);
 		user.setId(entityUser.getId());
@@ -58,7 +58,7 @@ public class AppRestController {
 		}
 	}
 
-	@DeleteMapping(value = "users/{id}")
+	@DeleteMapping(value = "logout/{id}")
 	public void deleteUser(@PathVariable(name = "id") int id) {
 		User user = findById(id);
 
@@ -69,14 +69,9 @@ public class AppRestController {
 		}
 	}
 
-	@GetMapping(value = "users", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<User> findAll() {
 		return userRepository.findAll();
-	}
-
-	@GetMapping(value = "users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public User findUser(@PathVariable(name = "id") int id) {
-		return findById(id);
 	}
 
 	private User findById(int id) {

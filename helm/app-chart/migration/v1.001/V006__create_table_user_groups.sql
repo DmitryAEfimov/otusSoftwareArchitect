@@ -20,7 +20,7 @@ BEGIN
     FROM dictionary_items di
              join dictionaries d on d.id = di.dictionary_id
     WHERE di.id = NEW.group_id
-      AND d.dictionary_type = 'USER_GROUPS';
+      AND d.dictionary_type = 'UserGroups';
 
     RETURN NEW;
 EXCEPTION
@@ -29,8 +29,29 @@ EXCEPTION
 END;
 $group_check$;
 
+CREATE OR REPLACE FUNCTION set_default_group() RETURNS trigger
+    LANGUAGE plpgsql AS
+$set_dflt_group$
+BEGIN
+    IF (NEW.group_id IS NULL) THEN
+        SELECT di.id
+        INTO NEW.group_id
+        FROM dictionary_items di
+                 JOIN dictionaries d ON d.id = di.dictionary_id
+        WHERE di.value = 'Users'
+          AND d.dictionary_type = 'UserGroups';
+    END IF;
+END;
+$set_dflt_group$;
+
 CREATE TRIGGER trg_check_group
-    BEFORE INSERT OR UPDATE
+    BEFORE UPDATE
     ON user_groups
     FOR EACH ROW
 EXECUTE PROCEDURE usr_check_group();
+
+CREATE TRIGGER trg_set_dflt_group
+    BEFORE INSERT
+    ON user_groups
+    FOR EACH ROW
+EXECUTE PROCEDURE set_default_group();

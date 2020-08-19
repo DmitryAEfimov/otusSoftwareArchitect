@@ -6,8 +6,8 @@ DECLARE
     l_dict_usr_group uuid := uuid_generate_v4();
     l_dict_role      uuid := uuid_generate_v4();
 BEGIN
-    INSERT INTO dictionaries(id, dictionary_type, is_system) VALUES (l_dict_usr_group, 'USER_GROUPS', true);
-    INSERT INTO dictionaries(id, dictionary_type, is_system) VALUES (l_dict_role, 'ROLES', true);
+    INSERT INTO dictionaries(id, dictionary_type, is_system) VALUES (l_dict_usr_group, 'UserGroups', true);
+    INSERT INTO dictionaries(id, dictionary_type, is_system) VALUES (l_dict_role, 'Roles', true);
 
     WITH ins_role AS (
         INSERT INTO dictionary_items (dictionary_id, item, is_system) VALUES (l_dict_role, 'Administrator', true)
@@ -16,7 +16,7 @@ BEGIN
              INSERT INTO dictionary_items (dictionary_id, item, is_system) VALUES (l_dict_usr_group, 'Administrators', true)
                  RETURNING id)
     INSERT
-    INTO user_group_roles (user_group_id, role_id)
+    INTO user_group_roles (group_id, role_id)
     SELECT g.id, r.id
     FROM ins_group g
              CROSS JOIN ins_role r;
@@ -28,7 +28,7 @@ BEGIN
              INSERT INTO dictionary_items (dictionary_id, item, is_system) VALUES (l_dict_usr_group, 'Users', true)
                  RETURNING id)
     INSERT
-    INTO user_group_roles (user_group_id, role_id)
+    INTO user_group_roles (group_id, role_id)
     SELECT g.id, r.id
     FROM ins_group g
              CROSS JOIN ins_role r;

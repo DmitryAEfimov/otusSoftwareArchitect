@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson7.shop.restcontroller;
+package ru.otus.softwarearchitect.defimov.lesson9.shop.restcontroller;
 
 import io.micrometer.core.annotation.Timed;
 import org.springframework.context.MessageSource;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.softwarearchitect.defimov.lesson7.shop.model.User;
-import ru.otus.softwarearchitect.defimov.lesson7.shop.repository.UserRepository;
-import ru.otus.softwarearchitect.defimov.lesson7.shop.restcontroller.exception.UserChangeException;
-import ru.otus.softwarearchitect.defimov.lesson7.shop.restcontroller.exception.UserNotFoundException;
+import ru.otus.softwarearchitect.defimov.lesson9.model.user.User;
+import ru.otus.softwarearchitect.defimov.lesson9.repository.UserRepository;
+import ru.otus.softwarearchitect.defimov.lesson9.shop.restcontroller.exception.UserChangeException;
+import ru.otus.softwarearchitect.defimov.lesson9.shop.restcontroller.exception.UserNotFoundException;
 
 import java.util.List;
 import java.util.Locale;

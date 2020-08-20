@@ -20,6 +20,7 @@
 		<postgresql.version>42.2.12</postgresql.version>
 		<h2.version>1.4.200</h2.version>
 		<micrometer.version>1.5.1</micrometer.version>
+		<guava.version>29.0-jre</guava.version>
 		<hibernate-types.version>2.9.13</hibernate-types.version>
 	</properties>
 
@@ -37,6 +38,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
 		</dependency>
 
 		<dependency>

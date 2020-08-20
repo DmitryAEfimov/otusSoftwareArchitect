@@ -1,6 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson9.model.credentails;
-
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.User;
+package ru.otus.softwarearchitect.defimov.lesson9.model.user;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -15,9 +13,9 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "CREDENTALS")
+@Table(name = "CREDENTIALS")
 @Access(AccessType.FIELD)
-public class Credentals {
+public class Credentials {
 	private UUID id;
 
 	@OneToOne(optional = false)
@@ -25,10 +23,19 @@ public class Credentals {
 	private User user;
 
 	@Column(name = "LOGIN", nullable = false, updatable = false)
-	private String login;
+	String login;
 
 	@Column(name = "PASSWORD", nullable = false)
-	private String password;
+	String password;
+
+	protected Credentials() {
+		//  JPA Only
+	}
+
+	public Credentials(String login, String password) {
+		this.login = login;
+		this.password = password;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,7 +45,7 @@ public class Credentals {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	protected void setId(UUID id) {
 		this.id = id;
 	}
 
@@ -48,5 +55,24 @@ public class Credentals {
 
 	public String getPassword() {
 		return password;
+	}
+
+	@Override public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		Credentials that = (Credentials) o;
+
+		if (!login.equals(that.login))
+			return false;
+		return password.equals(that.password);
+	}
+
+	@Override public int hashCode() {
+		int result = login.hashCode();
+		result = 31 * result + password.hashCode();
+		return result;
 	}
 }

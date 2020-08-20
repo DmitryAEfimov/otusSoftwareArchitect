@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson9.model.user;
+package ru.otus.softwarearchitect.defimov.lesson9.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -62,5 +62,20 @@ public class UserProfile {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	@Override public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		UserProfile that = (UserProfile) o;
+
+		return email.equals(that.email);
+	}
+
+	@Override public int hashCode() {
+		return email.hashCode();
 	}
 }

@@ -1,52 +1,61 @@
-package ru.otus.softwarearchitect.defimov.lesson9.model.user;
+package ru.otus.softwarearchitect.defimov.lesson9.model;
+
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "USERS")
 @Access(AccessType.FIELD)
-@NamedQueries({
-		@NamedQuery(name = "findById", query = "select u from User u where u.id = :userId"),
-		@NamedQuery(name = "findByEmail", query = "select u from User u where u.profile.email = :email"),
-		@NamedQuery(name = "findByCredentials", query = "select u from User u join u.credentials c where c.login = :login and c.password = :password"),
-		@NamedQuery(name = "findAll", query = "select u from User u"),
-})
+@TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 public class User {
 	private UUID id;
 
-	@OneToOne(mappedBy = "user", orphanRemoval = true)
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE,
+			CascadeType.REMOVE })
 	private Credentials credentials;
 	@Embedded
 	private UserProfile profile;
-	@OneToMany(mappedBy = "user")
-	private Set<UserGroup> userGroups;
+
+	@Enumerated(value = EnumType.STRING)
+	@ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
+	@CollectionTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"))
+	@Column(name = "ROLE")
+	@Type(type = "pgsql_enum")
+	private Set<UserRole> userRoles;
 
 	protected User() {
 		//  JPA Only
 	}
 
 	public User(Credentials credentials, UserProfile profile,
-			Set<UserGroup> userGroups) {
+			Set<UserRole> userRoles) {
 		this.credentials = credentials;
+		credentials.setUser(this);
 		this.profile = profile;
-		this.userGroups = userGroups;
+		this.userRoles = userRoles;
 	}
 
 	@Id
@@ -81,12 +90,15 @@ public class User {
 		return credentials.login;
 	}
 
-	public Set<UserGroup> getUserGroups() {
-		return Collections.unmodifiableSet(userGroups);
+	public void addRole(UserRole role) {
+		userRoles.add(role);
 	}
 
-	public Set<Role> getRoles() {
-		return userGroups.stream().map(userGroup -> userGroup.roles).flatMap(Collection::stream)
-				.collect(Collectors.toUnmodifiableSet());
+	public void removeRole(UserRole role) {
+		userRoles.remove(role);
+	}
+
+	public Set<UserRole> getRoles() {
+		return Collections.unmodifiableSet(userRoles);
 	}
 }

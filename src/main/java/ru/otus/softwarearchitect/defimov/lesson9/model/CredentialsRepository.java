@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson9.model.user;
+package ru.otus.softwarearchitect.defimov.lesson9.model;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

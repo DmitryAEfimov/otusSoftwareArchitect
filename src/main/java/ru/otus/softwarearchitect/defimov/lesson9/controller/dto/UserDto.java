@@ -1,8 +1,10 @@
 package ru.otus.softwarearchitect.defimov.lesson9.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.UserProfile;
+import ru.otus.softwarearchitect.defimov.lesson9.model.User;
+import ru.otus.softwarearchitect.defimov.lesson9.model.UserProfile;
 
 import java.util.UUID;
 
@@ -14,9 +16,10 @@ public class UserDto {
 	@JsonProperty(value = "profile")
 	private UserProfileDto profile;
 
-	public UserDto(UUID userId, UserProfile profile) {
+	@JsonCreator
+	private UserDto(UUID userId, UserProfileDto profile) {
 		this.userId = userId;
-		this.profile = new UserProfileDto(profile);
+		this.profile = profile;
 	}
 
 	public UUID getUserId() {
@@ -38,11 +41,12 @@ public class UserDto {
 		@JsonProperty(value = "location")
 		private String location;
 
-		private UserProfileDto(UserProfile profile) {
-			this.email = profile.getEmail();
-			this.firstName = profile.getFirstName();
-			this.lastName = profile.getLastName();
-			this.location = profile.getLocation();
+		@JsonCreator
+		private UserProfileDto(String email, String firstName, String lastNamer, String location) {
+			this.email = email;
+			this.firstName = firstName;
+			this.lastName = lastNamer;
+			this.location = location;
 		}
 
 		public String getEmail() {
@@ -60,5 +64,12 @@ public class UserDto {
 		public String getLocation() {
 			return location;
 		}
+	}
+
+	public static UserDto asDto(User user) {
+		UserProfile profile = user.getProfile();
+		UserProfileDto profileDto = new UserProfileDto(profile.getEmail(), profile.getFirstName(),
+				profile.getLastName(), profile.getLocation());
+		return new UserDto(user.getId(), profileDto);
 	}
 }

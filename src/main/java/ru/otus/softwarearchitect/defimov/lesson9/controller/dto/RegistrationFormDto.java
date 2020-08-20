@@ -2,6 +2,7 @@ package ru.otus.softwarearchitect.defimov.lesson9.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.otus.softwarearchitect.defimov.lesson9.model.UserRole;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class RegistrationFormDto {
 	private UserDto.UserProfileDto profile;
 
 	@JsonProperty(value = "roles")
-	private List<String> userGroups;
+	private List<UserRole> userRoles;
 
 	public CredentialsDto getCredentials() {
 		return credentials;
@@ -24,7 +25,7 @@ public class RegistrationFormDto {
 		return profile;
 	}
 
-	public List<String> getUserGroups() {
-		return userGroups;
+	public List<UserRole> getUserRoles() {
+		return userRoles;
 	}
 }

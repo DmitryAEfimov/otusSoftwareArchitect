@@ -14,9 +14,9 @@ import ru.otus.softwarearchitect.defimov.lesson9.controller.dto.RegistrationForm
 import ru.otus.softwarearchitect.defimov.lesson9.controller.dto.UserDto;
 import ru.otus.softwarearchitect.defimov.lesson9.controller.exception.UserChangeException;
 import ru.otus.softwarearchitect.defimov.lesson9.controller.exception.UserNotFoundException;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.Credentials;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.User;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.UserProfile;
+import ru.otus.softwarearchitect.defimov.lesson9.model.Credentials;
+import ru.otus.softwarearchitect.defimov.lesson9.model.User;
+import ru.otus.softwarearchitect.defimov.lesson9.model.UserProfile;
 import ru.otus.softwarearchitect.defimov.lesson9.service.UserIdentificationService;
 import ru.otus.softwarearchitect.defimov.lesson9.service.exception.EmailAlreadyExistsException;
 import ru.otus.softwarearchitect.defimov.lesson9.service.exception.LoginAlreadyExistsException;
@@ -40,7 +40,7 @@ public class UserCrudRequestController {
 	}
 
 	@PostMapping(value = "users/register", produces = MediaType.APPLICATION_JSON_VALUE)
-	public User createUser(@RequestBody RegistrationFormDto registrationForm) {
+	public UserDto createUser(@RequestBody RegistrationFormDto registrationForm) {
 		Credentials credentials = new Credentials(registrationForm.getCredentials().getLogin(),
 				registrationForm.getCredentials().getPassword());
 
@@ -49,7 +49,8 @@ public class UserCrudRequestController {
 				registrationForm.getProfile().getLocation());
 
 		try {
-			return userIdentificationService.register(credentials, profile, registrationForm.getUserGroups());
+			User user = userIdentificationService.register(credentials, profile, registrationForm.getUserRoles());
+			return UserDto.asDto(user);
 		} catch (LoginAlreadyExistsException ex) {
 			throw new UserChangeException(
 					messageSource
@@ -60,13 +61,14 @@ public class UserCrudRequestController {
 		}
 	}
 
-	@PutMapping(value = "users/profile/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public void updateUserProfile(@PathVariable(name = "id") UUID userId,
+	@PutMapping(value = "users/profiles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public UserDto updateUserProfile(@PathVariable(name = "id") UUID userId,
 			@RequestBody UserDto.UserProfileDto profileDto) {
 		UserProfile profile = new UserProfile(profileDto.getEmail(), profileDto.getFirstName(),
 				profileDto.getLastName(), profileDto.getLocation());
+		User user;
 		try {
-			userIdentificationService.updateProfile(userId, profile)
+			user = userIdentificationService.updateProfile(userId, profile)
 					.orElseThrow(() -> new UserNotFoundException(
 							messageSource.getMessage("userNotFound", new Object[] { userId }, Locale.US)));
 		} catch (EmailAlreadyExistsException ex) {
@@ -75,9 +77,11 @@ public class UserCrudRequestController {
 							.getMessage("userEmailAlreadyExists", new Object[] { profile.getEmail() },
 									Locale.US));
 		}
+
+		return UserDto.asDto(user);
 	}
 
-	@DeleteMapping(value = "users/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "users/profiles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUser(@PathVariable(name = "id") UUID userId) {
 		Optional<User> user = userIdentificationService.delete(userId);
 
@@ -87,7 +91,7 @@ public class UserCrudRequestController {
 		}
 	}
 
-	@GetMapping(value = "admin/users/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "admin/profiles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserDto getProfile(@PathVariable(name = "id") UUID userId) {
 		Optional<User> optionalUser = userIdentificationService.getUser(userId);
 		if (optionalUser.isEmpty()) {
@@ -96,12 +100,12 @@ public class UserCrudRequestController {
 		}
 
 		return optionalUser
-				.map(user -> new UserDto(user.getId(), user.getProfile())).get();
+				.map(UserDto::asDto).get();
 	}
 
-	@GetMapping(value = "admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "admin/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<UserDto> findAll() {
 		return userIdentificationService.getUsers()
-				.map(user -> new UserDto(user.getId(), user.getProfile())).collect(Collectors.toList());
+				.map(UserDto::asDto).collect(Collectors.toList());
 	}
 }

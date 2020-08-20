@@ -1,47 +1,43 @@
 package ru.otus.softwarearchitect.defimov.lesson9.service;
 
+import com.google.common.collect.Streams;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
-import ru.otus.softwarearchitect.defimov.lesson9.model.dictionary.DictionaryRepository;
-import ru.otus.softwarearchitect.defimov.lesson9.model.dictionary.DictionaryType;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.Credentials;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.CredentialsRepository;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.User;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.UserGroup;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.UserProfile;
-import ru.otus.softwarearchitect.defimov.lesson9.model.user.UserRepository;
+import ru.otus.softwarearchitect.defimov.lesson9.model.Credentials;
+import ru.otus.softwarearchitect.defimov.lesson9.model.CredentialsRepository;
+import ru.otus.softwarearchitect.defimov.lesson9.model.User;
+import ru.otus.softwarearchitect.defimov.lesson9.model.UserProfile;
+import ru.otus.softwarearchitect.defimov.lesson9.model.UserRepository;
+import ru.otus.softwarearchitect.defimov.lesson9.model.UserRole;
 import ru.otus.softwarearchitect.defimov.lesson9.service.exception.EmailAlreadyExistsException;
 import ru.otus.softwarearchitect.defimov.lesson9.service.exception.LoginAlreadyExistsException;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
 public class UserIdentificationService {
-	private final static String DEFAULT_USER_GROUP_NAME = "Users";
+	private final static UserRole DEFAULT_USER_ROLE = UserRole.User;
 
 	private final UserRepository userRepository;
 	private final CredentialsRepository credentialsRepository;
-	private final DictionaryRepository dictRepository;
 
-	public UserIdentificationService(UserRepository userRepository, CredentialsRepository credentialsRepository,
-			DictionaryRepository dictRepository) {
+	public UserIdentificationService(UserRepository userRepository, CredentialsRepository credentialsRepository) {
 		this.userRepository = userRepository;
 		this.credentialsRepository = credentialsRepository;
-		this.dictRepository = dictRepository;
 	}
 
-	public User register(Credentials credentials, UserProfile profile, List<String> userGroups)
+	public User register(Credentials credentials, UserProfile profile, List<UserRole> userRoles)
 			throws EmailAlreadyExistsException, LoginAlreadyExistsException {
 
 		checkLoginNotExists(credentials.getLogin());
-		checkEmailNotExists(profile.getEmail());
+		checkEmailNotExists(null, profile.getEmail());
 
-		return userRepository.save(new User(credentials, profile, findUserGroups(userGroups)));
+		return userRepository.save(new User(credentials, profile, getCompleteInitialRoles(userRoles)));
 	}
 
 	public Optional<User> updateProfile(UUID userId, UserProfile profile)
@@ -49,7 +45,7 @@ public class UserIdentificationService {
 		Optional<User> user = getUser(userId);
 
 		if (user.isPresent()) {
-			checkEmailNotExists(profile.getEmail());
+			checkEmailNotExists(userId, profile.getEmail());
 			user.get().setProfile(profile);
 			userRepository.save(user.get());
 		}
@@ -65,7 +61,7 @@ public class UserIdentificationService {
 	}
 
 	public Stream<User> getUsers() {
-		return userRepository.findAll();
+		return Streams.stream(userRepository.findAll());
 	}
 
 	public Optional<User> getUser(UUID userId) {
@@ -80,23 +76,21 @@ public class UserIdentificationService {
 		}
 	}
 
-	private void checkEmailNotExists(String email) throws EmailAlreadyExistsException {
-		Optional<User> user = userRepository.findByEmail(email);
+	private void checkEmailNotExists(@Nullable UUID thisUserId, String email) throws EmailAlreadyExistsException {
+		Optional<User> anotherUser = userRepository.findTopByProfileEmail(email);
 
-		if (user.isPresent()) {
+		if (anotherUser.isPresent() && !anotherUser.get().getId().equals(thisUserId)) {
 			throw new EmailAlreadyExistsException();
 		}
 	}
 
-	private Set<UserGroup> findUserGroups(List<String> groupNames) {
-		List<String> assignedGroupNames = groupNames != null && !groupNames.isEmpty() ?
-				groupNames :
-				Collections.singletonList(DEFAULT_USER_GROUP_NAME);
+	private Set<UserRole> getCompleteInitialRoles(List<UserRole> userRoles) {
+		Set<UserRole> roles = new HashSet<>();
+		roles.add(DEFAULT_USER_ROLE);
+		if (userRoles != null && !userRoles.contains(DEFAULT_USER_ROLE)) {
+			roles.addAll(userRoles);
+		}
 
-		return dictRepository.findTopByDictionaryType(DictionaryType.USER_GROUPS).getElements()
-				.stream().filter(item -> assignedGroupNames.contains(item.getValue()))
-				.filter(UserGroup.class::isInstance).map(UserGroup.class::cast).collect(
-						Collectors.toSet());
-
+		return roles;
 	}
 }

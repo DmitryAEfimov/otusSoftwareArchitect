@@ -1,4 +1,4 @@
-package ru.otus.softwarearchitect.defimov.lesson9.model.user;
+package ru.otus.softwarearchitect.defimov.lesson9.model;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -55,6 +55,10 @@ public class Credentials {
 
 	public String getPassword() {
 		return password;
+	}
+
+	void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override public boolean equals(Object o) {

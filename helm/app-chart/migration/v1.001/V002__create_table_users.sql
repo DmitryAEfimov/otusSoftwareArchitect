@@ -6,4 +6,3 @@ CREATE TABLE users
     last_name  VARCHAR(128),
     location   VARCHAR(256)       NOT NULL
 );
-CREATE UNIQUE INDEX idx_usr_email ON users (email);

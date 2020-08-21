@@ -12,26 +12,16 @@ import java.util.UUID;
 public class UserDto {
 	@JsonProperty(value = "userId")
 	private UUID userId;
-
 	@JsonProperty(value = "profile")
-	private UserProfileDto profile;
+	private ProfileDto profileDto;
 
 	@JsonCreator
-	private UserDto(UUID userId, UserProfileDto profile) {
+	public UserDto(UUID userId, ProfileDto profileDto) {
 		this.userId = userId;
-		this.profile = profile;
+		this.profileDto = profileDto;
 	}
 
-	public UUID getUserId() {
-		return userId;
-	}
-
-	public UserProfileDto getProfile() {
-		return profile;
-	}
-
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class UserProfileDto {
+	public static class ProfileDto {
 		@JsonProperty(value = "email")
 		private String email;
 		@JsonProperty(value = "firstName")
@@ -42,7 +32,7 @@ public class UserDto {
 		private String location;
 
 		@JsonCreator
-		private UserProfileDto(String email, String firstName, String lastNamer, String location) {
+		private ProfileDto(String email, String firstName, String lastNamer, String location) {
 			this.email = email;
 			this.firstName = firstName;
 			this.lastName = lastNamer;
@@ -66,10 +56,15 @@ public class UserDto {
 		}
 	}
 
+	public UUID getUserId() {
+		return userId;
+	}
+
 	public static UserDto asDto(User user) {
 		UserProfile profile = user.getProfile();
-		UserProfileDto profileDto = new UserProfileDto(profile.getEmail(), profile.getFirstName(),
-				profile.getLastName(), profile.getLocation());
-		return new UserDto(user.getId(), profileDto);
+
+		return new UserDto(user.getId(),
+				new ProfileDto(profile.getEmail(), profile.getFirstName(), profile.getLastName(),
+						profile.getLocation()));
 	}
 }

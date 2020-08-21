@@ -3,6 +3,8 @@ package ru.otus.softwarearchitect.defimov.lesson9.model;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -21,6 +23,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
@@ -29,7 +32,7 @@ import java.util.UUID;
 @Table(name = "USERS")
 @Access(AccessType.FIELD)
 @TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
-public class User {
+public class User implements UserDetails {
 	private UUID id;
 
 	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = { CascadeType.PERSIST,
@@ -50,12 +53,10 @@ public class User {
 		//  JPA Only
 	}
 
-	public User(Credentials credentials, UserProfile profile,
-			Set<UserRole> userRoles) {
+	public User(Credentials credentials) {
 		this.credentials = credentials;
 		credentials.setUser(this);
-		this.profile = profile;
-		this.userRoles = userRoles;
+		this.userRoles = Collections.singleton(UserRole.User);
 	}
 
 	@Id
@@ -78,27 +79,42 @@ public class User {
 		this.profile = profile;
 	}
 
-	public String getPassword() {
-		return credentials.getPassword();
+	public void setUserRoles(Set<UserRole> userRoles) {
+		this.userRoles = userRoles;
 	}
 
-	public void setPassword(String password) {
-		credentials.password = password;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return userRoles;
 	}
 
-	public String getLogin() {
+	@Override
+	public String getUsername() {
 		return credentials.login;
 	}
 
-	public void addRole(UserRole role) {
-		userRoles.add(role);
+	@Override
+	public String getPassword() {
+		return credentials.password;
 	}
 
-	public void removeRole(UserRole role) {
-		userRoles.remove(role);
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
 	}
 
-	public Set<UserRole> getRoles() {
-		return Collections.unmodifiableSet(userRoles);
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }

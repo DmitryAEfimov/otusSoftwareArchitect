@@ -39,7 +39,7 @@ service:
   containerPort: "8000"
   serviceName: app-service
   database:
-    version: "005"
+    version: "004"
 
 ingress:
   enabled: true
@@ -79,7 +79,7 @@ postgresql:
     enabled: true
     serviceMonitor:
       enabled: true
-      namespace: monitoring
+      namespace: auth
       interval: 30s
       scrapeTimeout: 10s
     customMetrics:

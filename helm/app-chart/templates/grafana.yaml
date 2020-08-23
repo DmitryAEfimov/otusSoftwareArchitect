@@ -68,7 +68,7 @@ data:
         "steppedLine": false,
         "targets": [
         {
-          "expr": "sum by (pod, container) (rate(container_memory_working_set_bytes{namespace=\"monitoring\", container=~\"app-(chart|postgresql)\"}[5m]))",
+          "expr": "sum by (pod, container) (rate(container_memory_working_set_bytes{namespace=\"auth\", container=~\"app-(chart|postgresql)\"}[5m]))",
           "interval": "",
           "legendFormat": "{{"{{"}}pod}}-{{"{{"}}container}}",
           "refId": "A"
@@ -156,7 +156,7 @@ data:
         "steppedLine": false,
         "targets": [
         {
-          "expr": "rate(container_cpu_usage_seconds_total{namespace=\"monitoring\", container=~\"app-(chart|postgresql)\"}[5m])",
+          "expr": "rate(container_cpu_usage_seconds_total{namespace=\"auth\", container=~\"app-(chart|postgresql)\"}[5m])",
           "interval": "",
           "legendFormat": "{{"{{"}}pod}}-{{"{{"}}container}}",
           "refId": "A"

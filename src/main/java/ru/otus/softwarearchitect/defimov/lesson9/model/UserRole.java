@@ -8,10 +8,11 @@ public enum UserRole implements GrantedAuthority {
 	private String authRole;
 
 	UserRole(String authRole) {
-		this.authRole = "ROLE_" + authRole;
+		this.authRole = authRole;
 	}
 
-	@Override public String getAuthority() {
+	@Override
+	public String getAuthority() {
 		return authRole;
 	}
 }

@@ -24,7 +24,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 
@@ -53,10 +52,10 @@ public class User implements UserDetails {
 		//  JPA Only
 	}
 
-	public User(Credentials credentials) {
+	public User(Credentials credentials, Set<UserRole> userRoles) {
 		this.credentials = credentials;
 		credentials.setUser(this);
-		this.userRoles = Collections.singleton(UserRole.User);
+		this.userRoles = userRoles;
 	}
 
 	@Id
@@ -96,6 +95,10 @@ public class User implements UserDetails {
 	@Override
 	public String getPassword() {
 		return credentials.password;
+	}
+
+	public void setPassword(String password) {
+		this.credentials.password = password;
 	}
 
 	@Override

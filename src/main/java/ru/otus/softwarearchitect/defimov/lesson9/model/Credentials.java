@@ -41,7 +41,7 @@ public class Credentials {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	@Access(AccessType.PROPERTY)
-	public UUID getId() {
+	protected UUID getId() {
 		return id;
 	}
 
@@ -59,24 +59,5 @@ public class Credentials {
 
 	void setUser(User user) {
 		this.user = user;
-	}
-
-	@Override public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-
-		Credentials that = (Credentials) o;
-
-		if (!login.equals(that.login))
-			return false;
-		return password.equals(that.password);
-	}
-
-	@Override public int hashCode() {
-		int result = login.hashCode();
-		result = 31 * result + password.hashCode();
-		return result;
 	}
 }

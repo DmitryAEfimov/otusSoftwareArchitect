@@ -1,5 +1,6 @@
 package ru.otus.softwarearchitect.defimov.lesson9.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,8 @@ import java.util.UUID;
 
 @Service
 public class UserProfileService {
-
-	private final UserRepository userRepository;
-
-	public UserProfileService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+	@Autowired
+	private UserRepository userRepository;
 
 	public User changeUserProfile(UUID userId, UserProfile profile)
 			throws UserNotFoundException, EmailAlreadyExistsException {

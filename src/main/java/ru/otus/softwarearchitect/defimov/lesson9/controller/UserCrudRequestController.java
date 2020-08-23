@@ -3,13 +3,16 @@ package ru.otus.softwarearchitect.defimov.lesson9.controller;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.softwarearchitect.defimov.lesson9.controller.dto.UserDto;
 import ru.otus.softwarearchitect.defimov.lesson9.controller.exception.UserChangeException;
@@ -55,9 +58,12 @@ public class UserCrudRequestController {
 	}
 
 	@DeleteMapping(value = "/profiles/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public void deleteUser(@PathVariable(name = "id") UUID userId) {
 		try {
 			profileService.delete(userId);
+			SecurityContextHolder.clearContext();
+
 		} catch (UserNotFoundException ex) {
 			throw new UserChangeException(
 					messageSource.getMessage("userNotFound", new Object[] { userId }, Locale.US));

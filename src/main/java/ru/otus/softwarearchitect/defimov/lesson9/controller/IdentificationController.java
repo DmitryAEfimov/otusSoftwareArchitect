@@ -4,7 +4,7 @@ import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,13 +29,16 @@ public class IdentificationController {
 	private IdentityUserService identityUserService;
 	@Autowired
 	private MessageSource messageSource;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserDto registerUser(@RequestBody RegistrationFormDto dtoRegistrationFormProfile) {
 		CredentialsDto dtoCredentials = dtoRegistrationFormProfile.getCredentialsDto();
 		UserDto.ProfileDto dtoProfile = dtoRegistrationFormProfile.getProfileDto();
 
-		Credentials credentials = new Credentials(dtoCredentials.getLogin(), dtoCredentials.getPassword());
+		String encodedPassword = passwordEncoder.encode(dtoCredentials.getPassword());
+		Credentials credentials = new Credentials(dtoCredentials.getLogin(), encodedPassword);
 		UserProfile profile = new UserProfile(dtoProfile.getEmail(), dtoProfile.getFirstName(),
 				dtoProfile.getLastName(), dtoProfile.getLocation());
 

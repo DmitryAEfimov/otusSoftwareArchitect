@@ -1,0 +1,525 @@
+{
+	"info": {
+		"_postman_id": "7901692c-7417-487d-b161-06d2a2bcc502",
+		"name": "Auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register admin user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "652302cb-6ba5-492c-afba-01bfa5f8889c",
+						"exec": [
+							" var responseJSON = JSON.parse(responseBody)",
+							" pm.collectionVariables.set(\"adminId\", responseJSON[\"userId\"])"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"credentials\": {\n\t\t\"login\": \"admin\",\n\t\t\"password\": \"admin\"\n\t},\n\t\"profile\": {\n\t\t\"email\": \"admin\"\n\t},\n\t\"roles\": [\n\t\t\"Administrator\"\n\t]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/signup",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register simple user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a2024e1c-5e51-47d0-bc10-e07d017ed420",
+						"exec": [
+							" var responseJSON = JSON.parse(responseBody)",
+							" pm.collectionVariables.set(\"userId\", responseJSON[\"userId\"])"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"credentials\": {\n\t\t\"login\": \"pupkin\",\n\t\t\"password\": \"pupkin\"\n\t},\n\t\"profile\": {\n\t\t\"email\": \"pupkin@email.com\",\n\t\t\"firstName\": \"Vasya\",\n\t\t\"lastName\": \"Pupkin\",\n\t\t\"location\": \"Moscow, Mira av, 41\"\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/signup",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user profile unauth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "35ef5c04-77f8-437c-a77f-925b6e755c53",
+						"exec": [
+							"pm.collectionVariables.set(\"referer\", pm.response.headers.get(\"Referer\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/profiles/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"profiles",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "910a3778-6939-4e4c-b61e-2b989b74701f",
+						"exec": [
+							"pm.collectionVariables.set(\"jSessionId\", postman.getResponseCookie(\"JSESSIONID\").value)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Referer",
+						"value": "/otusapp{{referer}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "pupkin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "pupkin",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/signin",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update simple user profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "49586e39-475b-4ee7-96ea-b7801f1611d2",
+						"exec": [
+							" "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"vpupkin@email.com\",\n\t\"firstName\": \"Vasya\",\n\t\"lastName\": \"Pupkin\",\n\t\"location\": \"Moscow, Mira av, 42\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/profiles/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"profiles",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get admin profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/profiles/{{adminId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"profiles",
+						"{{adminId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all users under simple user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/admin/users",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/signout",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"signout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user profile after logout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/profiles/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"profiles",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b29ae449-c8fc-40e1-8e78-da2ce9dc62d7",
+						"exec": [
+							"pm.collectionVariables.set(\"jSessionId\", postman.getResponseCookie(\"JSESSIONID\").value)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/signin",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get profiles under admin user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/admin/users",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete admin",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/profiles/{{adminId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"profiles",
+						"{{adminId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login simple user for delete himself",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f640b422-b1cf-4ed0-a763-cc7eca580831",
+						"exec": [
+							"pm.collectionVariables.set(\"jSessionId\", postman.getResponseCookie(\"JSESSIONID\").value)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Referer",
+						"value": "/otusapp{{referer}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "pupkin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "pupkin",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/signin",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete simple user",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{baseUrl}}/otusapp/profiles/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"otusapp",
+						"profiles",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "0c7f3e18-4a9d-4324-968a-04bd0831615b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ede9948d-a9ad-44ef-8cc2-2645d27f662f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "67676237-fea8-47e7-b95c-59db16a83054",
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "51a89a00-1ed1-4eeb-8812-c0f5d784eda3",
+			"key": "adminId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "d5252671-fefb-4ca1-b813-1c797dfa8246",
+			"key": "baseUrl",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "0ef3104a-c70b-4454-9122-464c21191235",
+			"key": "referer",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "916f64e7-f9ad-4d69-93b3-46c7965ecf2a",
+			"key": "jSessionId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

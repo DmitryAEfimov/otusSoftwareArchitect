@@ -36,7 +36,7 @@ Execute command: ```cd <deployment directory>``` followed by ```helm install app
 
 Execute command: ```helm uninstall app``` to stop application
 
-### [API GAteway schema](https://github.com/DmitryAEfimov/otusSoftwareArchitect/blob/lesson09_auth/src/main/resources/data/api%20gateway%20interaction%20schema.pdf)
+### [API Gateway schema](https://github.com/DmitryAEfimov/otusSoftwareArchitect/blob/lesson09_auth/src/main/resources/data/api%20gateway%20interaction%20schema.pdf)
     
 #### Run scenario
 * Register users

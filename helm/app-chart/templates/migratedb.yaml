@@ -37,10 +37,15 @@ spec:
         - name: migrate-db
           image: "{{ .Values.image.flywayRepository }}:latest"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - mountPath: flyway/migration
+              name: flyway-migration-scripts
           envFrom:
             - secretRef:
                 name: "{{ include "app-chart.fullname" . }}-secret"
           env:
+            - name: SCRIPT_LOCATION
+              value: 'filesystem:/flyway/migration'
             - name: DB_URL
               valueFrom:
                 configMapKeyRef:
@@ -51,4 +56,8 @@ spec:
                 configMapKeyRef:
                   name: "{{ include "app-chart.fullname" . }}-config"
                   key: dbuser
+      volumes:
+        - name: flyway-migration-scripts
+          configMap:
+            name: flyway-cm
   backoffLimit: 0

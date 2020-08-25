@@ -22,4 +22,4 @@ RUN groupadd -g 999 appuser && \
     chmod 644 app.jar
 USER appuser
 
-CMD java -Dspring.application.json=${SPRING_APPLICATION_JSON} -jar app.jar
+CMD java -Dspring.application.json="${SPRING_APPLICATION_JSON}" -jar app.jar

@@ -3,6 +3,7 @@ package ru.otus.softwarearchitect.defimov.lesson9.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import ru.otus.softwarearchitect.defimov.lesson9.model.UserRole;
 
@@ -43,7 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authenticationEntryPoint(new AuthenticationEntryPointImpl(HttpStatus.UNAUTHORIZED))
 				.and()
 				.formLogin().loginPage("/signin")
-				.usernameParameter("login").passwordParameter("password")
 				.successHandler(new AuthentificationLoginSuccessHandler())
 				.and()
 				.logout().logoutUrl("/signout")
@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new AppAuthProvider(userDetailsService, passwordEncoder());
 	}
 
-	private static class AuthentificationLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+	private static class AuthentificationLoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 		public AuthentificationLoginSuccessHandler() {
 			setUseReferer(true);
 		}
@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				HttpServletResponse response, Authentication authentication)
 				throws IOException, ServletException {
 			response.setStatus(HttpServletResponse.SC_OK);
-			response.sendRedirect(request.getHeader("referer"));
+			response.sendRedirect(request.getHeader(HttpHeaders.REFERER));
 		}
 	}
 
@@ -99,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		public void commence(HttpServletRequest request, HttpServletResponse response,
 				AuthenticationException authException) throws IOException, ServletException {
 			response.setStatus(httpStatus.value());
-			response.setHeader("referer", request.getRequestURI());
+			response.setHeader(HttpHeaders.REFERER, request.getRequestURI());
 		}
 	}
 }

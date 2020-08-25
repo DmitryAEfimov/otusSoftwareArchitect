@@ -6,7 +6,18 @@ data:
   url: {{ printf "jdbc:postgresql://%s:%s/%s" (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase | quote }}
   dbuser: {{ .Values.postgresql.postgresqlUsername | quote }}
   appconfig.json: |
-    {"spring":{"datasource":{"url":{{ printf "jdbc:postgresql://%s:%s/%s" (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase | quote }},"username":{{ .Values.postgresql.postgresqlUsername | quote }},"password":{{ .Values.postgresql.postgresqlPassword | quote }}}},"server":{"port":{{ .Values.service.containerPort | quote }}}}
+    {
+      "spring": {
+        "datasource": {
+          "url": {{ printf "jdbc:postgresql://%s:%s/%s" (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase | quote }},
+          "username": {{ .Values.postgresql.postgresqlUsername | quote }},
+          "password": {{ .Values.postgresql.postgresqlPassword | quote }}
+        }
+      },
+      "server": {
+        "port": {{ .Values.service.containerPort | quote }}
+      }
+    }
 ---
 apiVersion: v1
 kind: Secret
@@ -15,3 +26,12 @@ metadata:
 type: Opaque
 data:
   DB_PASSWORD: {{ .Values.postgresql.postgresqlPassword | b64enc | trimAll "\n" | quote }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: flyway-cm
+  labels:
+    name: flyway-cm
+data:
+  {{- (.Files.Glob "migration/**").AsConfig | nindent 2 }}

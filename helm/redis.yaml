@@ -1,0 +1,4 @@
+password: passwd
+redisPort: 6379
+cluster:
+  enabled: false

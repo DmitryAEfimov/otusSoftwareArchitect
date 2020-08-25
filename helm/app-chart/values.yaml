@@ -61,6 +61,20 @@ metrics:
   serviceMonitor:
     enabled: true
 
+redis:
+  enabled: true
+  password: passwd
+  redisPort: 6379
+  cluster:
+    enabled: false
+  sentinel:
+    enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: auth
+
 postgresql:
   enabled: true
   postgresqlDatabase: postgres

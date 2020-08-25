@@ -43,16 +43,48 @@ Execute command: ```helm uninstall app``` to stop application
   * Admin user: POST /signup. Expect response code 200
   * SImple user: POST /signup. Expect response code 200
 * Test simple user
-  * Get user profile with no auth: GET /profiles/{{userId}}. Expect response code 401; expect response has header "Referer": /profiles/{{userId}}
-  * Login simple user via login form: POST /signin. Expect response code 302. Expect simple user profile data in response body. Expect cookie "JSESSIONID"
-  * Update user profile: PUT /profiles/{{userId}}. Expect response code 200
-  * Request admin profile: GET /profile/{{adminId}}. Expect response code 403
-  * Request all users. GET /profile/admin/users. Expect response code 403
-  * Logout simple user. POST /signout. Expect response code 200
-  * Get user profile after signout. GET /profiles/{{userId}}. Expect response code 401
+  * Get user profile with no auth: GET /profiles/{{userId}}.
+   
+        Expect response code 401
+        
+        Expect response has a header named "Referer" with value /profiles/{{userId}}
+  * Login simple user via login form: POST /signin.
+        
+        Expect response code 200.
+        
+        Expect redirecting on user profile form according to header "Referer" (i.e. non empty user profile data in response body).
+        
+        Expect cookie "SESSION"
+  * Update user profile: PUT /profiles/{{userId}}.
+  
+        Expect response code 200
+  * Request admin profile: GET /profile/{{adminId}}.
+        
+        Expect response code 403
+  * Request all users. GET /profile/admin/users.
+        
+        Expect response code 403
+  * Logout simple user. POST /signout.
+        
+        Expect response code 200
+        
+        Expect reset cookie "SESSION" value
+  * Get user profile after signout. GET /profiles/{{userId}}.
+  
+        Expect response code 401
 * Test admin user
-  * Login admin user via login form: POST /signin. Expect response code 302. Expect cookie "JSESSIONID" with new value
-  * Request all users: GET /profile/admin/users. Expect response code 200
-  * Delete admin user: DELETE /profiles/{{adminId}}. Expect response code 401. Expect empty cookie "JSESSIONID"
+  * Login admin user via login form: POST /signin.
+        
+        Expect response code 302.
+        
+        Expect cookie "SESSION" with new value
+  * Request all users: GET /profile/admin/users.
+        
+        Expect response code 200
+  * Delete admin user: DELETE /profiles/{{adminId}}.
+        
+        Expect response code 401.
+        
+        Expect reset cookie "SESSION" value
   
 See [postman tests](https://github.com/DmitryAEfimov/otusSoftwareArchitect/blob/lesson09_auth/src/test/resources/postman) for details

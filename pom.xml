@@ -22,6 +22,7 @@
 		<micrometer.version>1.5.1</micrometer.version>
 		<guava.version>29.0-jre</guava.version>
 		<hibernate-types.version>2.9.13</hibernate-types.version>
+		<redis-clients.version>3.3.0</redis-clients.version>
 	</properties>
 
 	<dependencies>
@@ -46,9 +47,24 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladmihalcea</groupId>
+			<artifactId>hibernate-types-52</artifactId>
+			<version>${hibernate-types.version}</version>
 		</dependency>
 
 		<dependency>
@@ -59,16 +75,16 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.vladmihalcea</groupId>
-			<artifactId>hibernate-types-52</artifactId>
-			<version>${hibernate-types.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${redis-clients.version}</version>
 		</dependency>
 
 		<dependency>
@@ -77,7 +93,6 @@
 			<version>${h2.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
